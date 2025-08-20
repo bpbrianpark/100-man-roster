@@ -15,7 +15,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     })
     return {
         props: {
-            user
+            user: {
+                ...user,
+                createdAt: user?.createdAt?.toISOString(), // convert Date → string
+            },
         }
     }
 }

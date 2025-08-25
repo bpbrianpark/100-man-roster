@@ -2,18 +2,12 @@ export async function queryWDQS(sparql: string) {
   const res = await fetch("https://query.wikidata.org/sparql", {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/sparql-query",
       "User-Agent": "WikiQuiz/0.1 (contact@example.com)",
       "Accept": "application/sparql-results+json"
     },
-    body: new URLSearchParams({ query: sparql }).toString()
+    body: sparql
   });
-
-  if (!res.ok) {
-    const text = await res.text(); 
-    throw new Error(`WDQS error ${res.status}: ${text}`);
-  }
-
+  if (!res.ok) throw new Error(`WDQS error ${res.status}`);
   return res.json();
 }
-

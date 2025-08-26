@@ -51,7 +51,6 @@ model Entry {
   label  String 
   norm   String
   url    String 
-
   aliases Alias[]
 }
 

@@ -1,0 +1,73 @@
+import GuessInput from "@/app/components/GuessInput";
+import { Category, Entry } from "@prisma/client";
+import { notFound } from "next/navigation";
+
+
+// Cache is set to no-store because it will be a dynamic DB
+async function getEntries(slug: string): Promise<Entry[]> {
+  const res = await fetch(`http://localhost:3000/api/categories/${slug}/entries`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    if (res.status === 404) notFound();
+    throw new Error("Failed to fetch entries");
+  }
+
+  const data = await res.json();
+  return data.entries;
+}
+
+async function getDifficulties(slug: string): Promise<Category> {
+    const res = await fetch(`http://localhost:3000/api/categories/${slug}/`, { 
+        cache: "no-store"
+    });
+
+    if (!res.ok) {
+        if (res.status === 404) notFound();
+        throw new Error("Failed to fetch category.");
+    }
+
+    const data = await res.json();
+    return data.difficulties
+}
+
+export default async function QuizPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params; 
+  const entries = await getEntries(slug);
+  const difficulties = await getDifficulties(slug);
+
+  return (
+    <div className="quiz-container">
+        <div className="quiz-top-layer">
+            <div className="stopwatch">
+                
+            </div>
+        </div>
+
+        <div className="quiz-second-layer">
+            <div className="category-name">
+
+            </div>
+
+            <div className="difficulty-picker">
+
+            </div>
+        </div>
+
+        <div className="quiz-third-layer">
+            <div className="input-guesser">
+                <GuessInput entries={entries}></GuessInput>
+            </div>
+
+            <div className="guess-button">
+
+            </div>
+        </div>
+
+        <div className="quiz-table">
+
+        </div>
+    </div>
+  );
+}

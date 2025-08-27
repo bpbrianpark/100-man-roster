@@ -1,12 +1,13 @@
 'use client'
 
-import { Entry } from "@prisma/client"
-import { useState, useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from 'react';
+import { Entry } from '@prisma/client';
 
-export interface GuessInputProps {
-    entries: Entry[];
-    disabled?: boolean;
-};
+interface GuessInputProps {
+  entries: Entry[];
+  onCorrectGuess: (entry: Entry) => void;
+  onIncorrectGuess: (guess: string) => void;
+}
 
 function normalizeGuess(guess: string): string {
     return guess.toLowerCase().trim().replace(/\s+/g, '');
@@ -16,77 +17,67 @@ function buildEntryHashMap(entries: Entry[]): Map<string, Entry> {
     const hashMap = new Map<string, Entry>();
 
     for (const entry of entries) {
-        hashMap.set(entry.norm, entry)
-        hashMap.set(normalizeGuess(entry.label), entry)
-
-        // for (const alias of entry.aliases) {
-        //     hashMap.set(alias.norm, entry);
-        //     hashMap.set(normalizeGuess(alias.label), entry)
-        // }
+        if (entry.norm) {
+            hashMap.set(entry.norm, entry);
+        }
+        hashMap.set(normalizeGuess(entry.label), entry);
     }
-    return hashMap
+    return hashMap;
 }
 
 function checkGuess(guess: string, entryHashMap: Map<string, Entry>): Entry | null {
-    const normalizedGuess = normalizeGuess(guess)
-    
-    return entryHashMap.get(normalizedGuess) || null
+    const normalizedGuess = normalizeGuess(guess);
+    return entryHashMap.get(normalizedGuess) || null;
 }
 
-export default function GuessInput({
-    entries,
-    disabled = false,
-}: GuessInputProps) {
-    const entryHashMap = useMemo(() => {
-        return buildEntryHashMap(entries)
-    }, [entries])
+export default function GuessInput({ entries, onCorrectGuess, onIncorrectGuess }: GuessInputProps) {
+  const entryHashMap = useMemo(() => {
+        return buildEntryHashMap(entries);
+    }, [entries]);
+  const [inputValue, setInputValue] = useState('');
 
-    const [guess, setGuess] = useState('')
+  const handleSubmit = useCallback((e?: React.FormEvent) => {
+        if (e) {
+            e.preventDefault();
+        }
 
-    const handleSubmit = useCallback((e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!guess.trim()) {
-            return
+        if (!inputValue.trim()) {
+            return;
         }
         
-        const correctGuess = checkGuess(guess, entryHashMap)
+        const correctEntry = checkGuess(inputValue, entryHashMap);
 
-        if (correctGuess) {
-            setGuess('');
-            console.log("You got it!")
-            return
+        if (correctEntry) {
+            onCorrectGuess(correctEntry);
+            setInputValue('');
+        } else {
+            onIncorrectGuess(inputValue.trim());
+            setInputValue('');
         }
-    }, [guess, entryHashMap]);
+    }, [inputValue, entryHashMap, onCorrectGuess, onIncorrectGuess]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setGuess(e.target.value)
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
     }
+  };
 
-    return (
-        <form onSubmit={handleSubmit} className="guess-input-form">
-            <div className="input-field">
-                <input
-                    type="text"
-                    value={guess}
-                    onChange={handleInputChange}
-                    placeholder=''
-                    className="guess-input"
-                    autoComplete="off"
-                    disabled={disabled}
-                    autoFocus
-                />
-            </div>
-
-            <div className="guess-button">
-                <button
-                    type="submit"
-                    className="submit-button"
-                    disabled={!guess.trim() || disabled}
-                >
-                    Guess
-                </button>
-            </div>
-        </form>
-    )
+  return (
+    <div className="guess-input-wrapper">
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyPress}
+        placeholder="Enter your guess..."
+        className="guess-input"
+      />
+      <button 
+        onClick={handleSubmit}
+        className="guess-button"
+      >
+        Guess
+      </button>
+    </div>
+  );
 }

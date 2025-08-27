@@ -1,7 +1,6 @@
-import GuessInput from "@/app/components/GuessInput";
+import QuizGame from "@/app/components/QuizGame";
 import { Category, Entry } from "@prisma/client";
 import { notFound } from "next/navigation";
-
 
 // Cache is set to no-store because it will be a dynamic DB
 async function getEntries(slug: string): Promise<Entry[]> {
@@ -38,36 +37,10 @@ export default async function QuizPage({ params }: { params: Promise<{ slug: str
   const difficulties = await getDifficulties(slug);
 
   return (
-    <div className="quiz-container">
-        <div className="quiz-top-layer">
-            <div className="stopwatch">
-                
-            </div>
-        </div>
-
-        <div className="quiz-second-layer">
-            <div className="category-name">
-
-            </div>
-
-            <div className="difficulty-picker">
-
-            </div>
-        </div>
-
-        <div className="quiz-third-layer">
-            <div className="input-guesser">
-                <GuessInput entries={entries}></GuessInput>
-            </div>
-
-            <div className="guess-button">
-
-            </div>
-        </div>
-
-        <div className="quiz-table">
-
-        </div>
-    </div>
+    <QuizGame 
+      entries={entries}
+      totalEntries={entries.length}
+      slug={slug}
+    />
   );
 }

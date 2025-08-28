@@ -6,6 +6,7 @@ import QuizTable from './QuizTable';
 import Stopwatch from './Stopwatch';
 import { Difficulty, Entry } from '@prisma/client';
 import DifficultyPicker from './DifficultyPicker';
+import GiveUpButton from './GiveUpButton';
 
 interface QuizGameClientProps { 
     difficulties: Difficulty[]
@@ -21,6 +22,7 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
     const [correctGuesses, setCorrectGuesses] = useState<Entry[]>([]);
     const [incorrectGuesses, setIncorrectGuesses] = useState<string[]>([]);
     const [finalTime, setFinalTime] = useState<number | null>(null);
+    const [completed, setCompleted] = useState(false);
 
     const targetEntries = selectedDifficulty?.limit || totalEntries;
 
@@ -43,6 +45,11 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
         setFinalTime(null);
     }, []);
 
+    const handleGiveUp = useCallback(() => {
+        console.log("Hath given up.")
+        setCompleted(true)
+    }, [])
+
     const handleIncorrectGuess = useCallback((guess: string) => {
         if (incorrectGuesses.includes(guess)) {
         return;
@@ -52,17 +59,17 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
     }, [incorrectGuesses]);
 
     const handleStopwatchUpdate = useCallback((time: number) => {
-        if (isQuizCompleted && finalTime === null) {
+        if ((isQuizCompleted && finalTime === null) || completed) {
             setFinalTime(time);
         }
-    }, [isQuizCompleted, finalTime])
+    }, [completed, isQuizCompleted, finalTime])
 
     return (
         <div className="quiz-container">
         <div className="quiz-top-layer">
             <div className="stopwatch">
             <Stopwatch 
-            isRunning={!isQuizCompleted}
+            isRunning={!isQuizCompleted && !completed}
             onTimeUpdate={handleStopwatchUpdate}
             />
             {isQuizCompleted && (
@@ -71,6 +78,7 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
                 </div>
             )}
             </div>
+            <GiveUpButton onGiveUp={handleGiveUp}/>
         </div>
 
         <div className="quiz-second-layer">

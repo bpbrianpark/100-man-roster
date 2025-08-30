@@ -24,3 +24,37 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(game);
 }
+
+// Endpoint to put the game inside the database after completion
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { slug, difficultyId, time, targetCount, username } = body
+
+    if (!slug || !difficultyId || !time || !targetCount || !username) {
+      return NextResponse.json(
+        { error: "Missing required field."},
+        { status: 400 }
+      )
+    }
+
+    const game = await prisma.game.create({
+      data: {
+        slug,
+        difficultyId,
+        time,
+        targetCount,
+        username
+      },
+      include: {
+        user: true,
+        category: true,
+        difficulty: true
+      }
+    });
+
+    return NextResponse.json(game, { status: 201 });
+  } catch (e) {
+    console.log("Error uploading game ", e)
+  }
+}

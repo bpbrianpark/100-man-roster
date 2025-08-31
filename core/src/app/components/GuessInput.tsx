@@ -1,10 +1,15 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react';
-import { Entry } from '@prisma/client';
+import { Category, Entry } from '@prisma/client';
+import { queryWDQS } from '../../../lib/wdqs';
+import { prisma } from '../../../lib/prisma';
+import { normalize } from '../../../lib/normalize';
 
 interface GuessInputProps {
+  category: Category;
   entries: Entry[];
+  isDynamic: boolean;
   isGameCompleted: boolean;
   onCorrectGuess: (entry: Entry) => void;
   onIncorrectGuess: (guess: string) => void;
@@ -26,18 +31,86 @@ function buildEntryHashMap(entries: Entry[]): Map<string, Entry> {
     return hashMap;
 }
 
-function checkGuess(guess: string, entryHashMap: Map<string, Entry>): Entry | null {
-    const normalizedGuess = normalizeGuess(guess);
-    return entryHashMap.get(normalizedGuess) || null;
+function buildCategoryQuery(updateSparql: string, guess: string): string {
+  return updateSparql.replace("SEARCH_TERM", `${guess}`);
 }
 
-export default function GuessInput({ entries, isGameCompleted, onCorrectGuess, onIncorrectGuess }: GuessInputProps) {
+async function checkAndInsertDynamic(
+  guess: string,
+  category: Category
+): Promise<boolean> {
+  if (!category.updateSparql) {
+    return false;
+  }
+
+  const sparqlWithGuess = buildCategoryQuery(category.updateSparql, guess);
+
+  const data = await queryWDQS(sparqlWithGuess);
+
+  if (data.results.bindings.length === 0) {
+    return false;
+  }
+
+  for (const row of data.results.bindings) {
+    const label = row.itemLabel?.value ?? row.item_label?.value;
+    const url = row.item?.value;
+    if (!label || !url) {
+      console.warn("Skipping row due to missing label or URL", row);
+      continue;
+    }
+
+    const aliases: string[] = row.alias ? [row.alias.value] : [];
+
+    console.log("Posting entry to API:", label, "URL:", url, "Aliases:", aliases);
+
+    try {
+      await fetch(`http://localhost:3000/api/categories/${category.slug}/entries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categoryId: category.id,
+          label,
+          norm: normalize(label),
+          url,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to insert entry via API:", err);
+    }
+  }
+
+  console.log("Finished inserting entries for guess:", guess);
+  return true;
+}
+
+
+async function checkGuess(
+  category: Category,
+  guess: string,
+  entryHashMap: Map<string, Entry>,
+  isDynamic: boolean
+): Promise<Entry | null> {
+  const normalizedGuess = normalizeGuess(guess);
+  const correspondingEntry = entryHashMap.get(normalizedGuess) || null;
+  if (isDynamic && correspondingEntry === null) {
+    const verifiedEntry = await checkAndInsertDynamic(guess, category);
+
+    if (!verifiedEntry) {
+      return null;
+    }
+  }
+
+  return correspondingEntry;
+}
+
+
+export default function GuessInput({ category, entries, isDynamic, isGameCompleted, onCorrectGuess, onIncorrectGuess }: GuessInputProps) {
   const entryHashMap = useMemo(() => {
         return buildEntryHashMap(entries);
     }, [entries]);
   const [inputValue, setInputValue] = useState('');
 
-  const handleSubmit = useCallback((e?: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
         if (e) {
             e.preventDefault();
         }
@@ -46,7 +119,7 @@ export default function GuessInput({ entries, isGameCompleted, onCorrectGuess, o
             return;
         }
         
-        const correctEntry = checkGuess(inputValue, entryHashMap);
+        const correctEntry = await checkGuess(category, inputValue, entryHashMap, isDynamic);
 
         if (correctEntry) {
             onCorrectGuess(correctEntry);

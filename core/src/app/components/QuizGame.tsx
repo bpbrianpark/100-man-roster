@@ -8,6 +8,7 @@ import { Difficulty, Entry } from '@prisma/client';
 import DifficultyPicker from './DifficultyPicker';
 import GiveUpButton from './GiveUpButton';
 import RestartButton from './RestartButton';
+import RegisterDialog from './RegisterDialog';
 
 interface QuizGameClientProps { 
     difficulties: Difficulty[]
@@ -17,6 +18,7 @@ interface QuizGameClientProps {
 }
 
 export default function QuizGame({ difficulties, entries, totalEntries, slug }: QuizGameClientProps) {
+    const [username, setUsername] = useState<string | null>(null)
     const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(
         difficulties.length > 0 ? difficulties[0] : null
     );
@@ -35,6 +37,10 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
     const isGameCompleted = useMemo(() => {
         return (isTargetEntriesGuessed || givenUp)
     }, [isTargetEntriesGuessed, givenUp])
+
+    const handleUsernameSubmit = useCallback((submittedUser: string) => {
+        setUsername(submittedUser)
+    }, [])
 
     const handleCorrectGuess = useCallback((guess: Entry) => {
         if (correctGuesses.includes(guess)) {
@@ -82,6 +88,29 @@ export default function QuizGame({ difficulties, entries, totalEntries, slug }: 
             setFinalTime(time);
         }
     }, [givenUp, isTargetEntriesGuessed, finalTime])
+
+    // const postGameData = useCallback(() => {
+    //     if (!username) return;
+
+    //     const gameData = {
+    //         username,
+    //         category: slug,
+    //         difficulty: selectedDifficulty
+    //         correctAnswers: correctGuesses.length
+    //         totalEntries: targetEntries
+    //         time: completionTime || finalTime
+    //         completed: isTargetEntriesGuessed
+    //         givenUp
+    //     }
+    // })
+
+    if (!username) {
+        return (
+            <RegisterDialog 
+            onUsernameSubmit={handleUsernameSubmit}
+            />
+        )
+    }
 
     return (
         <div className="quiz-container">

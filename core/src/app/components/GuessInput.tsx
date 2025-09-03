@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Category, Entry } from '@prisma/client';
 import { queryWDQS } from '../../../lib/wdqs';
-import { prisma } from '../../../lib/prisma';
 import { normalize } from '../../../lib/normalize';
 
 interface GuessInputProps {
@@ -15,10 +14,6 @@ interface GuessInputProps {
   onIncorrectGuess: (guess: string) => void;
 }
 
-function normalizeGuess(guess: string): string {
-    return guess.toLowerCase().trim().replace(/\s+/g, '');
-}
-
 function buildEntryHashMap(entries: Entry[]): Map<string, Entry> {
     const hashMap = new Map<string, Entry>();
 
@@ -26,7 +21,7 @@ function buildEntryHashMap(entries: Entry[]): Map<string, Entry> {
         if (entry.norm) {
             hashMap.set(entry.norm, entry);
         }
-        hashMap.set(normalizeGuess(entry.label), entry);
+        hashMap.set(normalize(entry.label), entry);
     }
     return hashMap;
 }
@@ -36,11 +31,12 @@ function buildCategoryQuery(updateSparql: string, guess: string): string {
 }
 
 async function checkAndInsertDynamic(
+  entryHashMap: Map<string, Entry>,
   guess: string,
   category: Category
-): Promise<boolean> {
+): Promise<Entry | null> {
   if (!category.updateSparql) {
-    return false;
+    return null;
   }
 
   const sparqlWithGuess = buildCategoryQuery(category.updateSparql, guess);
@@ -48,40 +44,38 @@ async function checkAndInsertDynamic(
   const data = await queryWDQS(sparqlWithGuess);
 
   if (data.results.bindings.length === 0) {
-    return false;
+    return null;
   }
 
-  for (const row of data.results.bindings) {
-    const label = row.itemLabel?.value ?? row.item_label?.value;
-    const url = row.item?.value;
-    if (!label || !url) {
-      console.warn("Skipping row due to missing label or URL", row);
-      continue;
+  const first = data.results.bindings[0];
+  if (!first) return null;
+
+  const label = first.itemLabel?.value ?? first.item_label?.value;
+  const url = first.item?.value;
+  if (!label || !url) return null;
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/categories/${category.slug}/entries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        categoryId: category.id,
+        label,
+        norm: normalize(label),
+        url,
+      }),
+    });
+    if (res.ok) {
+      const entry: Entry = await res.json();
+      if (entry.norm) entryHashMap.set(entry.norm, entry);
+      entryHashMap.set(normalize(entry.label), entry);
+      return entry;
     }
-
-    const aliases: string[] = row.alias ? [row.alias.value] : [];
-
-    console.log("Posting entry to API:", label, "URL:", url, "Aliases:", aliases);
-
-    try {
-      await fetch(`http://localhost:3000/api/categories/${category.slug}/entries`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          categoryId: category.id,
-          label,
-          norm: normalize(label),
-          url,
-        }),
-      });
-    } catch (err) {
-      console.error("Failed to insert entry via API:", err);
-    }
+  } catch (err) {
+    console.error("Failed to insert entry via API:", err);
   }
-
-  console.log("Finished inserting entries for guess:", guess);
-  return true;
-}
+    return null;
+  }
 
 
 async function checkGuess(
@@ -90,14 +84,14 @@ async function checkGuess(
   entryHashMap: Map<string, Entry>,
   isDynamic: boolean
 ): Promise<Entry | null> {
-  const normalizedGuess = normalizeGuess(guess);
+  const normalizedGuess = normalize(guess);
   const correspondingEntry = entryHashMap.get(normalizedGuess) || null;
   if (isDynamic && correspondingEntry === null) {
-    const verifiedEntry = await checkAndInsertDynamic(guess, category);
-
+    const verifiedEntry = await checkAndInsertDynamic(entryHashMap, guess, category);
     if (!verifiedEntry) {
       return null;
     }
+    return verifiedEntry
   }
 
   return correspondingEntry;
@@ -122,9 +116,11 @@ export default function GuessInput({ category, entries, isDynamic, isGameComplet
         const correctEntry = await checkGuess(category, inputValue, entryHashMap, isDynamic);
 
         if (correctEntry) {
+            console.log("Correct Entry! :", correctEntry)
             onCorrectGuess(correctEntry);
             setInputValue('');
         } else {
+            console.log("Incorrect Entry: ", inputValue)
             onIncorrectGuess(inputValue.trim());
             setInputValue('');
         }

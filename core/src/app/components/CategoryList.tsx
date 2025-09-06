@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { prisma } from "../../../lib/prisma";
 import CategoryButton from "./CategoryButton";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-export const dynamic = "force-dynamic";
 
-export default async function CategoryList() {
+export default function CategoryList() {
     const [categories, setCategories] = useState<any[]>([]);
 
     useEffect(() => {

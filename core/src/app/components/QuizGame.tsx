@@ -11,6 +11,7 @@ import DifficultyPicker from './DifficultyPicker';
 import GiveUpButton from './GiveUpButton';
 import RestartButton from './RestartButton';
 import RegisterDialog from './RegisterDialog';
+import Link from "next/link";
 
 interface QuizGameClientProps { 
     category: Category;
@@ -110,7 +111,7 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/games', {
+            const response = await fetch('/api/games', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,14 +149,14 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
             onResetComplete={handleStopwatchReset}
             onTimeUpdate={handleStopwatchUpdate}
             />
-            {isTargetEntriesGuessed && (
-                <div className="quiz-completed-message">
-                    Quiz complete!
-                </div>
-            )}
 
             <div className="give-up-restart-button-container">
             <GiveUpButton disabled={givenUp} onGiveUp={handleGiveUp}/>
+                        {isTargetEntriesGuessed && (
+                <Link href={`/leaderboard/${slug}`} className="quiz-completed-message">
+                    Leaderboards
+                </Link>
+            )}
             <RestartButton disabled={!isGameCompleted} onRestart={handleRestart}/>
             </div>
         </div>

@@ -4,6 +4,8 @@ import QuizGame from "@/app/components/QuizGame";
 import { Category, Difficulty, Entry } from "@prisma/client";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 async function getCategory(slug: string): Promise<Category> {
   const res = await fetch(`/api/categories/${slug}`, {
     cache: "no-store",

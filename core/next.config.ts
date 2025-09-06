@@ -9,7 +9,8 @@ const nextConfig = {
   },
   experimental: {
     turbo: false,
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma']
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
+    dynamicIO: true,
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

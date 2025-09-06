@@ -29,7 +29,7 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
     const [games, setGames] = useState<Game[]>(initialGames);
 
     const fetchGames = useCallback(async (difficultyId: string) => {
-        const url = new URL(`/api/games`);
+        const url = new URL(`http://localhost:3000/api/games`);
         url.searchParams.set("slug", slug);
         url.searchParams.set("difficultyId", difficultyId);
 

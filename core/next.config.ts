@@ -4,13 +4,12 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  exlint: {
+  eslint: {
     ignoreDuringBuilds: true,
   },
   experimental: {
     turbo: false,
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
-    dynamicIO: true,
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma']
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

@@ -1,3 +1,5 @@
+"use client"
+
 import QuizGame from "@/app/components/QuizGame";
 import { Category, Difficulty, Entry } from "@prisma/client";
 import { notFound } from "next/navigation";

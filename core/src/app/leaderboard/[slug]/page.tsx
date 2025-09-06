@@ -1,3 +1,5 @@
+"use client"
+
 import Leaderboard from "@/app/components/Leaderboard";
 import { Category, Difficulty, Game } from "@prisma/client";
 import { notFound } from "next/navigation";

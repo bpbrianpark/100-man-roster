@@ -1,20 +1,8 @@
-import { prisma } from "../../lib/prisma";
-import CategoryButton from "./components/CategoryButton";
+"use client";
 
-export default async function Home() {
-  const categories = await prisma.category.findMany();
+import CategoryList from "./components/CategoryList";
 
-  return (
-    <main>
-      <div className="category-link-grid">
-        {categories.map((category) => (
-          <CategoryButton
-            key={category.id}
-            slug={category.slug}
-            name={category.name}
-          />
-        ))}
-      </div>
-    </main>
-  );
+export default function Home() {
+  return <CategoryList />;
 }
+

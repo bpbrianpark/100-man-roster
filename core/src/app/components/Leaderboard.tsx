@@ -1,5 +1,3 @@
-'use client'
-
 import './leaderboard.css'
 
 import { useCallback, useEffect, useState } from "react";
@@ -23,7 +21,7 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
     const [games, setGames] = useState<GameType[]>(initialGames);
 
     const fetchGames = useCallback(async (difficultyId: string) => {
-        const url = new URL(`${baseUrl}/api/games`);
+        const url = new URL(`/api/games`);
         url.searchParams.set("slug", slug);
         url.searchParams.set("difficultyId", difficultyId);
 

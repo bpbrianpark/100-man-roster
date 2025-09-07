@@ -1,5 +1,3 @@
-'use client'
-
 import "./stopwatch.css";
 
 import { useState, useEffect, useRef, useImperativeHandle } from 'react';

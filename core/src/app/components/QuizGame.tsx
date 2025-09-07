@@ -104,7 +104,7 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
         }
 
         try {
-            const response = await fetch(`${baseUrl}/api/games`, {
+            const response = await fetch(`/api/games`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

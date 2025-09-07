@@ -77,12 +77,12 @@ export interface LeaderboardPropsType {
 }
 
 export interface QuizGameClientPropsType { 
-    category: Category;
-    difficulties: Difficulty[]
-    entries: Entry[];
-    totalEntries: number; 
+    category?: Category;
+    difficulties?: Difficulty[]
+    entries?: Entry[];
+    totalEntries?: number; 
     slug: string;
-    isDynamic: boolean;
+    isDynamic?: boolean;
 }
 
 export interface QuizTablePropsType {

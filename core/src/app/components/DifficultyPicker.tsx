@@ -1,5 +1,3 @@
-'use client'
-
 import './difficulty-picker.css'
 import { DifficultyPickerProps } from './types';
 

@@ -1,8 +1,4 @@
-'use client'
-
 import "./button.css";
-
-import { useState } from 'react';
 
 interface GuessInputProps {
   onGiveUp: () => void;

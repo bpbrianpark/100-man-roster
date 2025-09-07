@@ -1,5 +1,3 @@
-'use client'
-
 import "./register-dialog.css";
 import { useState } from 'react';
 
@@ -25,7 +23,7 @@ export default function RegisterDialog({ onUsernameSubmit }: RegisterDialogProps
         setError(null);
 
         try {
-            const response = await fetch(`${baseUrl}/api/users`, {
+            const response = await fetch(`/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: username.trim() }),

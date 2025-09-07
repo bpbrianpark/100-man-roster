@@ -1,5 +1,3 @@
-'use client'
-
 import "./quiz-table.css";
 import { QuizTablePropsType } from "./types";
 

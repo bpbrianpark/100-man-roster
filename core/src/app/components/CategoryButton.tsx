@@ -9,9 +9,11 @@ interface CategoryButtonProps {
   name: string;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 export default function CategoryButton({ slug, name }: CategoryButtonProps) {
   return (
-    <Link href={`/quiz/${slug}`}>
+    <Link href={`${baseUrl}/quiz/${slug}`}>
       <div className="category-button">
         {/* <Image
           src={imageUrl}

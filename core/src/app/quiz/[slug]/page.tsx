@@ -1,70 +1,34 @@
-"use client"
-
 import QuizGame from "@/app/components/QuizGame";
-import { Category, Difficulty, Entry } from "@prisma/client";
+import { prisma } from "../../../../lib/prisma";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-async function getCategory(slug: string): Promise<Category> {
-  const res = await fetch(`${baseUrl}/api/categories/${slug}`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    if (res.status === 404) notFound();
-    throw new Error("Failed to fetch entries");
-  }
-
-  const data = await res.json();
-  return data
-}
-
-// Cache is set to no-store because it will be a dynamic DB
-async function getEntries(slug: string): Promise<Entry[]> {
-  const res = await fetch(`${baseUrl}/api/categories/${slug}/entries`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    if (res.status === 404) notFound();
-    throw new Error("Failed to fetch entries");
-  }
-
-  const data = await res.json();
-  return data.entries;
-}
-
-async function getDifficulties(slug: string): Promise<Difficulty[]> {
-    const res = await fetch(`${baseUrl}/api/categories/${slug}/`, { 
-        cache: "no-store"
-    });
-
-    if (!res.ok) {
-        if (res.status === 404) notFound();
-        throw new Error("Failed to fetch category.");
-    }
-
-    const data = await res.json();
-    return data.difficulties
-}
 
 export default async function QuizPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; 
-  const category = await getCategory(slug);
-  const entries = await getEntries(slug);
-  const difficulties = await getDifficulties(slug);
-  const isDynamic = category.isDynamic
+  
+  const category = await prisma.category.findUnique({
+    where: { slug },
+    include: {
+      difficulties: {
+        orderBy: { level: 'asc' }
+      },
+      entries: true
+    }
+  });
+
+  if (!category) {
+    notFound();
+  }
 
   return (
     <QuizGame 
       category={category}
-      difficulties={difficulties}
-      entries={entries}
-      totalEntries={entries.length}
+      difficulties={category.difficulties || []}
+      entries={category.entries || []}
+      totalEntries={category.entries?.length || 0}
       slug={slug}
-      isDynamic={isDynamic}
+      isDynamic={category.isDynamic}
     />
   );
 }

@@ -1,13 +1,13 @@
+
 'use client'
 
 import './guess-input.css'
+
 
 import { useCallback, useMemo, useState } from 'react';
 import { queryWDQS } from '../../../lib/wdqs';
 import { normalize } from '../../../lib/normalize';
 import { CategoryType, EntryType, GuessInputProps } from './types';
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 function buildEntryHashMap(entries: EntryType[]): Map<string, EntryType> {
     const hashMap = new Map<string, EntryType>();
@@ -50,7 +50,7 @@ async function checkAndInsertDynamic(
   if (!label || !url) return null;
 
   try {
-    const res = await fetch(`${baseUrl}/api/categories/${category.slug}/entries`, {
+    const res = await fetch(`api/categories/${category.slug}/entries`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

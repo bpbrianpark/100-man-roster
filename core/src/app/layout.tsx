@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "test quiz",
-  description: "Can you name 100 real women?",
+  description: "quiz",
 };
 
 export default function RootLayout({

@@ -8,7 +8,7 @@ import { queryWDQS } from '../../../lib/wdqs';
 import { normalize } from '../../../lib/normalize';
 import { CategoryType, EntryType, GuessInputProps } from './types';
 
-const FUZZY_THRESHOLD = 0.1;
+const FUZZY_THRESHOLD = 0.01;
 
 function buildEntryHashMap(entries: EntryType[]): Map<string, EntryType> {
     const hashMap = new Map<string, EntryType>();

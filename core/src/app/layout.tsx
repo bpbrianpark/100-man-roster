@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Providers } from './providers'
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import NavBar from "./components/NavBar";
 

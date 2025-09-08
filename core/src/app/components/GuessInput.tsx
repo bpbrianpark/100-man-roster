@@ -8,7 +8,8 @@ import { queryWDQS } from '../../../lib/wdqs';
 import { normalize } from '../../../lib/normalize';
 import { CategoryType, EntryType, GuessInputProps } from './types';
 
-const FUZZY_THRESHOLD = 0.05;
+const FUZZY_THRESHOLD = 0.1;
+const FUZZY_GUESS_THRESHOLD = 8;
 
 function buildEntryHashMap(entries: EntryType[]): Map<string, EntryType> {
     const hashMap = new Map<string, EntryType>();
@@ -104,7 +105,7 @@ async function checkGuess(
   }
   
   const fuzzyMatch = fuzzySearch(entries, guess);
-  if (fuzzyMatch) {
+  if (fuzzyMatch && normalizedGuess.length > FUZZY_GUESS_THRESHOLD) {
     return fuzzyMatch;
   }
   

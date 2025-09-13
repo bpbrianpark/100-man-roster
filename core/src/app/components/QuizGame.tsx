@@ -86,7 +86,7 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
         if ((isTargetEntriesGuessed && finalTime === null) || givenUp) {
             setFinalTime(time);
 
-            if (isTargetEntriesGuessed) {
+            if (isTargetEntriesGuessed || givenUp) {
                 postGameData(time)
             }
         }
@@ -123,7 +123,7 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
     },[username, slug, selectedDifficulty, targetEntries, correctGuesses]);
 
     useEffect(() => {
-        if (isTargetEntriesGuessed && finalTime !== null && username && selectedDifficulty || givenUp && finalTime !== null) {
+        if ((isTargetEntriesGuessed && finalTime !== null && username && selectedDifficulty) || (givenUp && finalTime !== null)) {
             postGameData(finalTime);
         }
     }, [isTargetEntriesGuessed, finalTime, givenUp, username, selectedDifficulty, postGameData]);
@@ -147,11 +147,9 @@ export default function QuizGame({ category, difficulties, entries, totalEntries
             <div className="give-up-restart-button-container">
             <GiveUpButton disabled={givenUp} onGiveUp={handleGiveUp}/>
 
-    {isTargetEntriesGuessed && (
         <Link href={`/leaderboard/${slug}`} className="quiz-completed-message">
             Leaderboards
         </Link>
-    )}
             <RestartButton disabled={!isGameCompleted} onRestart={handleRestart}/>
             </div>
         </div>

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,79 +9,71 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String  
+  email     String
   password  String
-  username      String   @unique
   image     String?
   createdAt DateTime @default(now())
-
+  username  String   @unique
   games     Game[]
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  name      String   
-  sparql    String
-  imageUrl String?
-  isDynamic Boolean  @default(false)
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  name         String
+  sparql       String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  isDynamic    Boolean      @default(false)
   updateSparql String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt 
-
-  entries   Entry[]
-  difficulties  Difficulty[]
-  games     Game[]
+  imageUrl     String?
+  difficulties Difficulty[]
+  entries      Entry[]
+  games        Game[]
 }
 
 model Difficulty {
-  id        String  @id @default(cuid())
-  category  Category  @relation(fields: [categoryId], references: [id])
+  id         String   @id @default(cuid())
   categoryId String
-
-  level Int
-  limit Int
-
-  games Game[]
+  level      Int
+  limit      Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  games      Game[]
 }
 
 model Entry {
   id         String   @id @default(cuid())
-  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
-
-  label  String 
-  norm   String
-  url    String @unique
-  aliases Alias[]
+  label      String
+  norm       String
+  url        String   @unique
+  aliases    Alias[]
+  category   Category @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId, norm])
 }
 
 model Alias {
-  id       String @id @default(cuid())
-  entry    Entry  @relation(fields: [entryId], references: [id])
-  entryId  String
-
-  label String
-  norm  String
+  id      String @id @default(cuid())
+  entryId String
+  label   String
+  norm    String
+  entry   Entry  @relation(fields: [entryId], references: [id])
 
   @@index([entryId, norm])
 }
 
 model Game {
-  id      String  @id @default(cuid())
-  username  String
-  slug  String
+  id            String     @id @default(cuid())
+  username      String
+  slug          String
   difficultyId  String
-  time    Int
-  targetCount Int
-
-  user  User  @relation(fields:[username],references:[username], onDelete: Cascade)
-  category  Category  @relation(fields:[slug],references:[slug], onDelete:Cascade)
-  difficulty Difficulty @relation(fields: [difficultyId], references: [id], onDelete: Cascade)
+  time          Int
+  targetCount   Int
+  correct_count Int?
+  difficulty    Difficulty @relation(fields: [difficultyId], references: [id], onDelete: Cascade)
+  category      Category   @relation(fields: [slug], references: [slug], onDelete: Cascade)
+  user          User       @relation(fields: [username], references: [username], onDelete: Cascade)
 
   @@index([slug, targetCount, time])
 }
-
-

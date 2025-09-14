@@ -19,9 +19,10 @@ export async function GET(req: NextRequest) {
       slug,
       difficultyId,
     },
-    orderBy: {
-      time: "asc", 
-    },
+    orderBy: [
+      { correct_count: 'desc' },
+      { time: 'asc' }
+    ],
     take: 25, 
   });
 

@@ -2,7 +2,8 @@
 
 import './leaderboard.css'
 
-import { useCallback, useEffect, useState } from "react";
+import useSWR from "swr"
+import { useState } from "react";
 import DifficultyPicker from "./DifficultyPicker";
 import { DifficultyType, GameType, LeaderboardPropsType } from './types';
 
@@ -15,41 +16,50 @@ function formatTime(milliseconds: number): string {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export default function Leaderboard({ category, difficulties, initialGames, slug }: LeaderboardPropsType) {
     const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyType | null>(
         difficulties.length > 0 ? difficulties[0] : null
     );
-    const [games, setGames] = useState<GameType[]>(initialGames);
+    // const [games, setGames] = useState<GameType[]>(initialGames);
 
-    const fetchGames = useCallback(async (difficultyId: string) => {
-        try {
-            const res = await fetch(`/api/games?slug=${slug}&difficultyId=${difficultyId}`, { 
-                cache: "no-store" 
-            });
+    const { data: games = [], error, isLoading } = useSWR(`/api/games?slug=${slug}&difficultyId=${selectedDifficulty?.id}`, 
+        fetcher,
+        {
+            keepPreviousData: true,   
+            revalidateOnFocus: false, 
+        });
+
+    // const fetchGames = useCallback(async (difficultyId: string) => {
+    //     try {
+    //         const res = await fetch(`/api/games?slug=${slug}&difficultyId=${difficultyId}`, { 
+    //             cache: "no-store" 
+    //         });
             
-            if (!res.ok) {
-                console.error("Failed to fetch games");
-                return;
-            }
+    //         if (!res.ok) {
+    //             console.error("Failed to fetch games");
+    //             return;
+    //         }
             
-            const data = await res.json();
-            setGames(Array.isArray(data) ? data.slice(0, 25) : []); 
-        } catch (error) {
-            console.error("Error fetching games:", error);
-            setGames([]);
-        }
-    }, [slug]);
+    //         const data = await res.json();
+    //         setGames(Array.isArray(data) ? data.slice(0, 25) : []); 
+    //     } catch (error) {
+    //         console.error("Error fetching games:", error);
+    //         setGames([]);
+    //     }
+    // }, [slug]);
 
-    const handleDifficultyChange = useCallback((difficulty: DifficultyType) => {
-        setSelectedDifficulty(difficulty);
-        fetchGames(difficulty.id);
-    }, [fetchGames]);
+    // const handleDifficultyChange = useCallback((difficulty: DifficultyType) => {
+    //     setSelectedDifficulty(difficulty);
+    //     fetchGames(difficulty.id);
+    // }, [fetchGames]);
 
-    useEffect(() => {
-        if (selectedDifficulty) {
-            fetchGames(selectedDifficulty.id);
-        }
-    }, [selectedDifficulty, fetchGames]);
+    // useEffect(() => {
+    //     if (selectedDifficulty) {
+    //         fetchGames(selectedDifficulty.id);
+    //     }
+    // }, [selectedDifficulty, fetchGames]);
 
     return (
         <div className="leaderboard">
@@ -59,7 +69,7 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
             <DifficultyPicker
                 difficulties={difficulties}
                 selectedDifficulty={selectedDifficulty}
-                onDifficultyChange={handleDifficultyChange}
+                onDifficultyChange={setSelectedDifficulty}
             />
 
             <table className="leaderboard-table">
@@ -73,7 +83,7 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
                     </tr>
                 </thead>
                 <tbody>
-                    {games.map((game, index) => (
+                    {games.map((game: GameType, index: number) => (
                         <tr key={game.id}>
                             <td className="rank">
                                 {index + 1}

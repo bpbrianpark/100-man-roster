@@ -9,7 +9,7 @@ import { normalize } from '../../../lib/normalize';
 import { CategoryType, EntryType, GuessInputProps } from './types';
 
 const FUZZY_THRESHOLD = 0.1;
-const FUZZY_GUESS_THRESHOLD = 8;
+const LENGTH_DIFF_THRESHOLD = 3;
 
 function buildEntryHashMap(entries: EntryType[]): Map<string, EntryType> {
     const hashMap = new Map<string, EntryType>();
@@ -49,7 +49,12 @@ async function checkAndInsertDynamic(
 
   const label = first.itemLabel?.value ?? first.item_label?.value;
   const url = first.item?.value;
+
   if (!label || !url) return null;
+
+  const normalizedLabel = normalize(label)
+
+  if (Math.abs(normalizedLabel.length - guess.length) > LENGTH_DIFF_THRESHOLD) return null
 
   try {
     const res = await fetch(`/api/categories/${category.slug}/entries`, {
@@ -58,7 +63,7 @@ async function checkAndInsertDynamic(
       body: JSON.stringify({
         categoryId: category.id,
         label,
-        norm: normalize(label),
+        norm: normalizedLabel,
         url,
       }),
     });
@@ -83,7 +88,10 @@ function fuzzySearch(entries: EntryType[], guess: string): EntryType | null {
 
   const results = fuse.search(guess);
   
-  if (results.length > 0 && results[0].score && results[0].score < FUZZY_THRESHOLD) {
+  if (results.length > 0 && 
+    results[0].score && 
+    results[0].score < FUZZY_THRESHOLD &&
+    (Math.abs(results[0].item.norm.length - guess.length) <= LENGTH_DIFF_THRESHOLD)) {
     return results[0].item;
   }
   
@@ -105,7 +113,7 @@ async function checkGuess(
   }
   
   const fuzzyMatch = fuzzySearch(entries, guess);
-  if (fuzzyMatch && normalizedGuess.length > FUZZY_GUESS_THRESHOLD) {
+  if (fuzzyMatch) {
     return fuzzyMatch;
   }
   

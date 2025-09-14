@@ -44,39 +44,41 @@ async function checkAndInsertDynamic(
     return null;
   }
 
-  const first = data.results.bindings[0];
-  if (!first) return null;
+  for (const binding of data.results.bindings) {
+    const label = binding.itemLabel?.value ?? binding.item_label?.value;
+    const url = binding.item?.value;
 
-  const label = first.itemLabel?.value ?? first.item_label?.value;
-  const url = first.item?.value;
+    if (!label || !url) return null;
 
-  if (!label || !url) return null;
+    const normalizedLabel = normalize(label)
 
-  const normalizedLabel = normalize(label)
-
-  if (Math.abs(normalizedLabel.length - guess.length) > LENGTH_DIFF_THRESHOLD) return null
-
-  try {
-    const res = await fetch(`/api/categories/${category.slug}/entries`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        categoryId: category.id,
-        label,
-        norm: normalizedLabel,
-        url,
-      }),
-    });
-    if (res.ok) {
-      const entry: EntryType = await res.json();
-      if (entry.norm) entryHashMap.set(entry.norm, entry);
-      entryHashMap.set(normalize(entry.label), entry);
-      return entry;
+    if (Math.abs(normalizedLabel.length - guess.length) > LENGTH_DIFF_THRESHOLD) {
+      continue;
     }
-  } catch (err) {
-    console.error("Failed to insert entry via API:", err);
+
+    try {
+      const res = await fetch(`/api/categories/${category.slug}/entries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categoryId: category.id,
+          label,
+          norm: normalizedLabel,
+          url,
+        }),
+      });
+      if (res.ok) {
+        const entry: EntryType = await res.json();
+        if (entry.norm) entryHashMap.set(entry.norm, entry);
+        entryHashMap.set(normalize(entry.label), entry);
+        return entry;
+      }
+    } catch (err) {
+      console.error("Failed to insert entry via API:", err);
+    }
+  
   }
-    return null;
+  return null;
 }
 
 function fuzzySearch(entries: EntryType[], guess: string): EntryType | null {
@@ -116,6 +118,10 @@ async function checkGuess(
   if (fuzzyMatch) {
     return fuzzyMatch;
   }
+
+  // TODO: 
+  // check if exists in hashmap of alias
+  // check if exists in fuzzymatch of alias
   
   if (isDynamic) {
     const verifiedEntry = await checkAndInsertDynamic(entryHashMap, guess, category);

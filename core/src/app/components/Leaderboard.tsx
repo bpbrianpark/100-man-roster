@@ -22,44 +22,13 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
     const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyType | null>(
         difficulties.length > 0 ? difficulties[0] : null
     );
-    // const [games, setGames] = useState<GameType[]>(initialGames);
 
-    const { data: games = [], error, isLoading } = useSWR(`/api/games?slug=${slug}&difficultyId=${selectedDifficulty?.id}`, 
+    const { data: games = [] } = useSWR(`/api/games?slug=${slug}&difficultyId=${selectedDifficulty?.id}`, 
         fetcher,
         {
             keepPreviousData: true,   
             revalidateOnFocus: false, 
         });
-
-    // const fetchGames = useCallback(async (difficultyId: string) => {
-    //     try {
-    //         const res = await fetch(`/api/games?slug=${slug}&difficultyId=${difficultyId}`, { 
-    //             cache: "no-store" 
-    //         });
-            
-    //         if (!res.ok) {
-    //             console.error("Failed to fetch games");
-    //             return;
-    //         }
-            
-    //         const data = await res.json();
-    //         setGames(Array.isArray(data) ? data.slice(0, 25) : []); 
-    //     } catch (error) {
-    //         console.error("Error fetching games:", error);
-    //         setGames([]);
-    //     }
-    // }, [slug]);
-
-    // const handleDifficultyChange = useCallback((difficulty: DifficultyType) => {
-    //     setSelectedDifficulty(difficulty);
-    //     fetchGames(difficulty.id);
-    // }, [fetchGames]);
-
-    // useEffect(() => {
-    //     if (selectedDifficulty) {
-    //         fetchGames(selectedDifficulty.id);
-    //     }
-    // }, [selectedDifficulty, fetchGames]);
 
     return (
         <div className="leaderboard">

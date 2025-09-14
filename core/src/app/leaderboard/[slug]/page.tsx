@@ -29,9 +29,10 @@ export default async function LeaderboardPage({
       slug: slug,
       difficultyId: category.difficulties[0]?.id
     },
-    orderBy: {
-      time: 'asc'
-    },
+    orderBy: [
+      { correct_count: 'desc' },
+      { time: 'asc' }
+    ],
     take: 25
   });
 

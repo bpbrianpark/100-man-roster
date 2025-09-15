@@ -103,7 +103,7 @@ export default function SignInForm() {
                     </button>
                     
                     <p className={`input-error ${!error ? 'empty' : ''}`}>
-                        {error ?? 'placeholder'}
+                        {'Error signing in. Please enter the correct email/password.'}
                     </p>
                     
                     <div className="auth-links">

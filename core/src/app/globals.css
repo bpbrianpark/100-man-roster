@@ -7,12 +7,19 @@
                'Lucida Sans', Arial, sans-serif;
   --font-white: var(--color-primary);
   --font-dark: #1f2937;
-  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-subtle: 0 4px 16px #000000b3;
+  --shadow-elevated: 0 8px 32px #0a0a0ab3;
   --border-light: #e5e7eb;
   --error-color: #dc2626;
   --error-bg: #fef2f2;
+  --overlay-color: #000000b3;
   --success-color: #059669;
+  --success-color-light: #059000;
+  --dark-bg: #ffffff1a;
+  --blue-color: #1976d2;
+  --yellow-bright: #ffe135;
+  --yellow-bg: #ffc10733; 
+  --yellow-overlay: #ffc10780;
 }
 
 body {

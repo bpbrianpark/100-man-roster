@@ -101,3 +101,15 @@ export interface ProfileClientPropsType {
   user: User;
   games: Game[];
 }
+
+export interface CompletedDialogPropsType {
+  isOpen: boolean;
+  onClose: () => void;
+  finalTime: number;
+  correctGuesses: number;
+  targetEntries: number;
+  categoryName: string,
+  difficultyName: string,
+  isLoggedIn: boolean,
+  gameType: string
+}

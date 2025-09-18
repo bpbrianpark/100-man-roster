@@ -13,9 +13,10 @@ import RestartButton from "./RestartButton";
 import Link from "next/link";
 import { DifficultyType, EntryType, QuizGameClientPropsType } from "./types";
 import LeaderboardButton from "./LeaderboardButton";
+import CompletedDialog from "./CompletedDialog";
 
 export default function QuizGame({
-    aliases,
+  aliases,
   category,
   difficulties,
   entries,
@@ -36,6 +37,7 @@ export default function QuizGame({
   const [finalTime, setFinalTime] = useState<number | null>(null);
   const [givenUp, setGivenUp] = useState(false);
   const [shouldReset, setShouldReset] = useState(false);
+  const [showFinishedIndicator, setShowFinishedIndicator] = useState(false);
 
   const targetEntries = selectedDifficulty?.limit || totalEntries;
   const username = session?.user?.username;
@@ -70,6 +72,7 @@ export default function QuizGame({
 
   const handleGiveUp = useCallback(() => {
     setGivenUp(true);
+    setShowFinishedIndicator(true);
   }, []);
 
   const handleIncorrectGuess = useCallback(
@@ -85,6 +88,7 @@ export default function QuizGame({
 
   const handleRestart = useCallback(() => {
     setGivenUp(false);
+    setShowFinishedIndicator(false);
     setCorrectGuesses([]);
     setIncorrectGuesses([]);
     setFinalTime(null);
@@ -100,15 +104,20 @@ export default function QuizGame({
       setFinalTime(time);
       if ((isTargetEntriesGuessed && finalTime === null) || givenUp) {
         setFinalTime(time);
-
         if (isTargetEntriesGuessed || givenUp) {
-          console.log("P");
+          console.log("Target Entries has been guessed.");
+          setShowFinishedIndicator(true);
+          console.log("Show Finished idnicator: ", showFinishedIndicator);
           postGameData(time);
         }
       }
     },
     [givenUp, isTargetEntriesGuessed, finalTime]
   );
+
+  const handleCloseCongratsDialog = useCallback(() => {
+    setShowFinishedIndicator(false);
+  }, [showFinishedIndicator]);
 
   const postGameData = useCallback(
     async (time?: number) => {
@@ -151,6 +160,18 @@ export default function QuizGame({
         selectedDifficulty) ||
       (givenUp && finalTime !== null && !!username)
     ) {
+      setShowFinishedIndicator(true);
+    }
+  }, [isTargetEntriesGuessed, finalTime, givenUp]);
+
+  useEffect(() => {
+    if (
+      (isTargetEntriesGuessed &&
+        finalTime !== null &&
+        !!username &&
+        selectedDifficulty) ||
+      (givenUp && finalTime !== null && !!username)
+    ) {
       postGameData(finalTime);
     }
   }, [
@@ -159,6 +180,7 @@ export default function QuizGame({
     givenUp,
     username,
     selectedDifficulty,
+    showFinishedIndicator,
     postGameData,
   ]);
 
@@ -181,28 +203,22 @@ export default function QuizGame({
           onResetComplete={handleStopwatchReset}
           onTimeUpdate={handleStopwatchUpdate}
         />
-        
 
         <div className="give-up-restart-button-container">
           <GiveUpButton disabled={isGameCompleted} onGiveUp={handleGiveUp} />
 
+          <LeaderboardButton slug={slug} />
           <RestartButton
             disabled={!isGameCompleted}
             onRestart={handleRestart}
           />
         </div>
 
-        <LeaderboardButton slug={slug}/>
         {status !== "loading" && !session && (
-          <div
-            className="not-logged-in-container"
-          >
+          <div className="not-logged-in-container">
             <p className="not-logged-in-text">
               ⚠️ You are not logged in. Your score will not be recorded.{" "}
-              <Link
-                href="/sign-up"
-                className="not-logged-in-link"
-              >
+              <Link href="/sign-up" className="not-logged-in-link">
                 Click here to register
               </Link>
               .
@@ -251,6 +267,18 @@ export default function QuizGame({
       <QuizTable
         correctGuesses={correctGuesses}
         incorrectGuesses={incorrectGuesses}
+      />
+
+      <CompletedDialog
+        isOpen={showFinishedIndicator}
+        onClose={handleCloseCongratsDialog}
+        finalTime={finalTime}
+        correctGuesses={correctGuesses.length}
+        targetEntries={targetEntries}
+        categoryName={category.name}
+        difficultyName={selectedDifficulty?.name}
+        isLoggedIn={isLoggedIn}
+        gameType={"Normal"}
       />
     </div>
   );

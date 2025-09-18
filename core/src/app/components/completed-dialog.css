@@ -1,0 +1,163 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.completed-dialog {
+  background: var(--font-dark);
+  border-radius: 8px;
+  padding: 4%;
+  height: fit-content;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  color: white;
+  text-align: center;
+  box-shadow: 0 20px 40px var(--overlay-color);
+  animation: slideInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.close-button {
+  position: absolute;
+  z-index: 1;
+  top: 5%;
+  right: 3%;
+  background: var(--dark-bg);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background: var(--dark-bg);
+}
+
+.congrats-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.score-details {
+  background: var(--dark-bg);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.score-label {
+  font-weight: 600;
+}
+
+.score-value {
+  font-weight: bold;
+  color: var(--yellow-bright);
+}
+
+.copy-button {
+  background: var(--success-color);
+  border: none;
+  border-radius: 25px;
+  padding: 3% 20%;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 2% auto 0;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.copy-button:hover {
+  background: var(--success-color-light);
+}
+
+.copy-button.copied {
+  background: var(--blue-color);
+}
+
+.login-message {
+  background: var(--yellow-bg);
+  border: 1px solid var(--yellow-bg);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInScale {
+  0% {
+    transform: scale(0.5) translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--end-x, 0)) rotate(360deg);
+    opacity: 0;
+  }
+}

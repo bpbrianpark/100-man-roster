@@ -15,6 +15,7 @@ import { DifficultyType, EntryType, QuizGameClientPropsType } from "./types";
 import LeaderboardButton from "./LeaderboardButton";
 import Timer from "./Timer";
 import StartButton from "./StartButton";
+import CompletedDialog from "./CompletedDialog";
 
 export default function BlitzGame({
   aliases,
@@ -40,6 +41,7 @@ export default function BlitzGame({
   const [timeUp, setTimeUp] = useState(false);
   const [shouldReset, setShouldReset] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [showFinishedIndicator, setShowFinishedIndicator] = useState(false);
 
   const targetEntries = totalEntries;
   const timeLimit = 60000;
@@ -87,7 +89,7 @@ export default function BlitzGame({
 
   const handleStart = useCallback(() => {
     setGameStarted(true);
-  }, [])
+  }, []);
 
   const handleRestart = useCallback(() => {
     setGivenUp(false);
@@ -105,17 +107,25 @@ export default function BlitzGame({
 
   const handleTimeUp = useCallback(() => {
     setTimeUp(true);
-  }, [])
+  }, []);
 
   const handleTimerUpdate = useCallback(
     (remainingTime: number) => {
-      if ((isTargetEntriesGuessed || givenUp || remainingTime <= 0) && finalTime === null) {
+      if (
+        (isTargetEntriesGuessed || givenUp || remainingTime <= 0) &&
+        finalTime === null
+      ) {
         const elapsedTime = timeLimit - remainingTime;
         setFinalTime(elapsedTime);
+        setShowFinishedIndicator(true);
       }
     },
     [givenUp, isTargetEntriesGuessed, finalTime, timeLimit]
   );
+
+  const handleCloseCongratsDialog = useCallback(() => {
+    setShowFinishedIndicator(false);
+  }, [showFinishedIndicator]);
 
   const postGameData = useCallback(
     async (time?: number) => {
@@ -158,8 +168,20 @@ export default function BlitzGame({
         finalTime !== null &&
         !!username &&
         selectedDifficulty) ||
+      (givenUp && finalTime !== null && !!username)
+    ) {
+      setShowFinishedIndicator(true);
+    }
+  }, [isTargetEntriesGuessed, finalTime, givenUp]);
+
+  useEffect(() => {
+    if (
+      (isTargetEntriesGuessed &&
+        finalTime !== null &&
+        !!username &&
+        selectedDifficulty) ||
       (givenUp && finalTime !== null && !!username) ||
-      (isGameCompleted && finalTime !== null)
+      (isGameCompleted && finalTime !== null && !!username)
     ) {
       postGameData(finalTime);
     }
@@ -175,17 +197,17 @@ export default function BlitzGame({
   return (
     <div className="quiz-container">
       <div className="quiz-top-layer">
-                <div className="difficulty-picker-container">
-                  <DifficultyPicker
-                    difficulties={difficulties}
-                    selectedDifficulty={selectedDifficulty}
-                    onDifficultyChange={handleDifficultyChange}
-                    disabled={isTargetEntriesGuessed}
-                  ></DifficultyPicker>
-                </div>
+        <div className="difficulty-picker-container">
+          <DifficultyPicker
+            difficulties={difficulties}
+            selectedDifficulty={selectedDifficulty}
+            onDifficultyChange={handleDifficultyChange}
+            disabled={isTargetEntriesGuessed}
+          ></DifficultyPicker>
+        </div>
 
         <div className="category-name">{category.name}</div>
-        <Timer 
+        <Timer
           isRunning={!isGameCompleted && gameStarted}
           shouldReset={shouldReset}
           timeLimit={timeLimit}
@@ -195,43 +217,30 @@ export default function BlitzGame({
         />
 
         <div className="give-up-restart-button-container">
-            <StartButton
-            disabled={gameStarted}
-            onStart={handleStart}
-            />
-            <LeaderboardButton slug={slug}/>
-        {status !== "loading" && !session && (
-          <div
-            className="not-logged-in-container"
-          >
-            <p className="not-logged-in-text">
-              ⚠️ You are not logged in. Your score will not be recorded.{" "}
-              <Link
-                href="/sign-up"
-                className="not-logged-in-link"
-              >
-                Click here to register
-              </Link>
-              .
-            </p>
-          </div>
-        )}
+          <StartButton disabled={gameStarted} onStart={handleStart} />
+          <LeaderboardButton slug={slug} />
           <RestartButton
             disabled={!isGameCompleted}
             onRestart={handleRestart}
           />
         </div>
 
+        {status !== "loading" && !session && (
+          <div className="not-logged-in-container">
+            <p className="not-logged-in-text">
+              ⚠️ You are not logged in. Your score will not be recorded.{" "}
+              <Link href="/sign-up" className="not-logged-in-link">
+                Click here to register
+              </Link>
+              .
+            </p>
+          </div>
+        )}
+
         <div className="completed-game-message-container">
           {givenUp && (
             <span className="completed-game-message">
               ❌ You gave up. Try again! ❌
-            </span>
-          )}
-
-          {isGameCompleted && !isLoggedIn && (
-            <span className="completed-game-message">
-              Register to save your score to the leaderboard! ✅
             </span>
           )}
 
@@ -255,14 +264,24 @@ export default function BlitzGame({
             onIncorrectGuess={handleIncorrectGuess}
           />
         )}
-        <div className="progress-text">
-          {correctGuesses.length}
-        </div>
+        <div className="progress-text">{correctGuesses.length}</div>
       </div>
 
       <QuizTable
         correctGuesses={correctGuesses}
         incorrectGuesses={incorrectGuesses}
+      />
+
+      <CompletedDialog
+        isOpen={showFinishedIndicator}
+        onClose={handleCloseCongratsDialog}
+        finalTime={finalTime}
+        correctGuesses={correctGuesses.length}
+        targetEntries={targetEntries}
+        categoryName={category.name}
+        difficultyName={selectedDifficulty?.name}
+        isLoggedIn={isLoggedIn}
+        gameType={"Blitz"}
       />
     </div>
   );

@@ -18,41 +18,54 @@
 
 .correct-guesses-header {
     width: 80%; 
-    height: 30px; 
+    height: 32px; 
     border-radius: 4px; 
-    background: #059669;
+    background: var(--color-accent);
     font-size: 16px;
     text-align: center;
     color: #fff;
     display: flex;              
     justify-content: center;   
-    align-items: center;        
+    align-items: center;
+    font-weight: 500;
+    border: 1px solid var(--color-accent);
 }
 
 .guesses {
     width: 80%;
+    display: flex;
+    justify-content: center;
     max-height: fit-content;
+    margin-top: 16px;
 }
 
 .guess-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
     min-height: 100%;
     max-height: fit-content;
-    border-radius: 4px; 
-    background: #fff;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    border-radius: 6px; 
+    background: var(--color-primary);
+    border: 1px solid var(--color-secondary);
+    padding: 16px;
 }
 
 .incorrect-guess,
 .correct-guess {
-    color: #000;
-    margin-top: 4px;
-    margin-bottom: 6px; 
+    color: var(--color-text);
+    width: 100%;
 }
 
 .correct-guess a {
-    color: #000;
+    color: var(--color-text);
     text-decoration: none;
+    display: block;
+}
+
+.correct-guess a:hover {
+    text-decoration: underline;
 }
 
 .incorrect-guess:last-child,
@@ -64,20 +77,36 @@
     justify-self: center;
 }
 
-.incorrect-guess-text,
+.incorrect-guess-text {
+    display: block;
+    padding: 12px;
+    background-color: var(--color-secondary);
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .correct-guess-text {
-    padding: 10px;
+    display: block;
+    padding: 12px;
+    background-color: var(--color-accent);
+    color: #fff;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .incorrect-guesses-header {
     width: 80%;
-    height: 30px;
+    height: 32px;
     border-radius: 4px;
-    background: #c08888;
+    background: var(--color-secondary);
     font-size: 16px;
     text-align: center;
-    color: #fff;
+    color: var(--color-text);
     display: flex;              
     justify-content: center;   
-    align-items: center;  
+    align-items: center;
+    font-weight: 500;
+    border: 1px solid var(--color-secondary);
 }

@@ -13,61 +13,66 @@
 }
 
 .completed-dialog {
-  background: var(--color-quarternary);
+  background: var(--color-primary);
   border-radius: 8px;
-  padding: 4%;
+  padding: 32px;
   height: fit-content;
   max-width: 500px;
   width: 100%;
   position: relative;
-  color: white;
+  color: var(--color-text);
   text-align: center;
-  box-shadow: 0 20px 40px var(--overlay-color);
-  animation: slideInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid var(--color-secondary);
+  box-shadow: var(--shadow-elevated);
+  animation: slideInScale 0.3s ease-out;
   overflow: hidden;
 }
 
 .close-button {
   position: absolute;
   z-index: 1;
-  top: 5%;
-  right: 3%;
-  background: var(--dark-bg);
-  border: none;
+  top: 12px;
+  right: 12px;
+  background: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
-  transition: background-color 0.2s;
+  color: var(--color-text);
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .close-button:hover {
-  background: var(--dark-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
 }
 
 .congrats-title {
-  font-size: 36px;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
 }
 
 .score-details {
-  background: var(--dark-bg);
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  backdrop-filter: blur(10px);
+  background: var(--color-secondary);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 24px 0;
+  border: 1px solid var(--color-secondary);
 }
 
 .info-details {
-  background: var(--font-white);
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  backdrop-filter: blur(10px);
+  background: var(--color-secondary);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 24px 0;
+  border: 1px solid var(--color-secondary);
 }
 
 .score-item {
@@ -97,8 +102,8 @@
 }
 
 .score-value {
-  font-weight: bold;
-  color: var(--yellow-bright);
+  font-weight: 600;
+  color: var(--color-accent);
 }
 
 .info-value {
@@ -106,37 +111,40 @@
 }
 
 .copy-button {
-  background: var(--success-color);
-  border: none;
-  border-radius: 25px;
-  padding: 3% 20%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  border-radius: 6px;
+  padding: 12px 32px;
   color: white;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin: 2% auto 0;
-  transition: all 0.3s ease;
+  margin: 16px auto 0;
+  transition: all 0.2s ease;
   font-size: 16px;
 }
 
 .copy-button:hover {
   background: var(--success-color-light);
+  border-color: var(--success-color-light);
 }
 
 .copy-button.copied {
-  background: var(--blue-color);
+  background: var(--success-color-light);
+  border-color: var(--success-color-light);
 }
 
 .login-message {
-  background: var(--yellow-bg);
-  border: 1px solid var(--yellow-bg);
-  border-radius: 10px;
-  padding: 10px;
+  background: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  border-radius: 6px;
+  padding: 12px;
   margin-top: 20px;
   font-size: 14px;
+  color: var(--color-text);
 }
 
 .confetti-container {
@@ -168,7 +176,7 @@
 
 @keyframes slideInScale {
   0% {
-    transform: scale(0.5) translateY(100px);
+    transform: scale(0.95) translateY(20px);
     opacity: 0;
   }
   100% {

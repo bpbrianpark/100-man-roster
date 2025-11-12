@@ -212,7 +212,7 @@ export default function QuizGame({
         {status !== "loading" && !session && (
           <div className="not-logged-in-container">
             <p className="not-logged-in-text">
-              ⚠️ You are not logged in. Your score will not be recorded.{" "}
+              You are not logged in. Your score will not be recorded.{" "}
               <Link href="/sign-up" className="not-logged-in-link">
                 Click here to register
               </Link>
@@ -224,19 +224,19 @@ export default function QuizGame({
         <div className="completed-game-message-container">
           {givenUp && (
             <span className="completed-game-message">
-              ❌ You gave up. Try again! ❌
+              You gave up. Try again!
             </span>
           )}
 
           {isTargetEntriesGuessed && !isLoggedIn && (
             <span className="completed-game-message">
-              ✅ Good job! Register to save your score to the leaderboard! ✅
+              Good job! Register to save your score to the leaderboard!
             </span>
           )}
 
           {isTargetEntriesGuessed && isLoggedIn && (
             <span className="completed-game-message">
-              ✅ Good job! Check how you did on the leaderboard! ✅
+              Good job! Check how you did on the leaderboard!
             </span>
           )}
         </div>

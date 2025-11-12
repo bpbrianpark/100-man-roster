@@ -41,10 +41,12 @@ export default function ClientNavBar({ initialSession }: ClientNavBarProps) {
       <nav className="navbar">
         <div className="home-section">
         <Link href="/">
-          <img src="/home.svg" alt="Home" className="home-icon" />
+          <img src="/igloologoonly.png" alt="Home" className="home-icon" />
           </Link></div>
           <div className="title-section">
-            <h2>BlitzLister</h2>
+            <Link href="/">
+              <img src="/fullnamelogo.png" alt="Bungalow" className="navbar-logo" />
+            </Link>
           </div>
           <div className="right-side-buttons">
                   <div className="info-button" onClick={handleClickInfoButton}>

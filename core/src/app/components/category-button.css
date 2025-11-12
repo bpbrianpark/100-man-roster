@@ -26,7 +26,9 @@
 }
 
 .category-image {
-  width: 100%;
+  display: flex;
+  justify-self: center;
+  align-self: center;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
@@ -95,7 +97,6 @@
 }
 
 .mode-button {
-  width: 100%;
   padding: 12px 16px;
   border-radius: 6px;
   text-align: center;

@@ -12,7 +12,8 @@ export default function HeroSection() {
       <div className="hero-content">
         <h1 className="hero-title">Test Your Knowledge</h1>
         <p className="hero-subtitle">
-          Challenge yourself with our collection of engaging quizzes. 
+          How many (x) can you name in (x) amount of time?
+          
           {isLoggedIn 
             ? ` Welcome back, ${session?.user?.username}!` 
             : " Sign up to track your scores and compete on leaderboards."}

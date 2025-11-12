@@ -2,24 +2,31 @@
     min-width: 350px;
     max-width: 40%;  
     height: 100%; 
-    border-radius: 4px; 
-    border: 1px solid #ccc;
-    padding: 4px;
-    background: #fff;
+    border-radius: 6px; 
+    border: 2px solid var(--color-secondary);
+    padding: 12px 16px;
+    background: var(--color-primary);
     outline: none;
-    transition: background-color 0.6s ease, border-color 0.001s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     font-size: 16px;
     text-align: left;
+    color: var(--color-text);
+    font-family: var(--font-main);
+}
+
+.guess-input:focus {
+    border-color: var(--color-accent);
+    background: var(--color-primary);
 }
 
 .guess-input.error-fade {
-    background-color: #f8d7da;
-    border-color: #dc3545;
+    background-color: var(--error-bg);
+    border-color: var(--error-color);
 }
 
 .guess-input.correct-fade {
-    background-color: #d7f8dc;
-    border-color: #35dca4;
+    background-color: var(--color-secondary);
+    border-color: var(--color-accent);
 }
 
 .guess-input-container {
@@ -40,8 +47,8 @@
 .spinner {
   width: 16px;
   height: 16px;
-  border: 3px solid var(--color-tertiary);
-  border-top: 3px solid var(--color-quarternary);
+  border: 3px solid var(--color-secondary);
+  border-top: 3px solid var(--color-accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

@@ -2,7 +2,8 @@
     width: 75%; 
     font-size: 96px; 
     text-align: center; 
-    color: var(--font-dark);
-    font-family: inter;
-    justify-self: center
+    color: var(--color-text);
+    font-family: var(--font-main);
+    justify-self: center;
+    font-weight: 500;
 }

@@ -1,5 +1,6 @@
 .navbar-container {
-  background-color: var(--color-secondary); 
+  background-color: var(--color-primary); 
+  border-bottom: 2px solid var(--color-secondary);
   height: 4rem;
 }
 
@@ -53,11 +54,11 @@
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--color-quarternary) 0%, var(--color-tertiary) 100%);
+    background: var(--color-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--color-secondary);
     flex-shrink: 0;
 }
 

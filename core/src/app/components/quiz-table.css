@@ -18,15 +18,17 @@
 
 .correct-guesses-header {
     width: 80%; 
-    height: 30px; 
+    height: 32px; 
     border-radius: 4px; 
-    background: #059669;
+    background: var(--color-accent);
     font-size: 16px;
     text-align: center;
     color: #fff;
     display: flex;              
     justify-content: center;   
-    align-items: center;        
+    align-items: center;
+    font-weight: 500;
+    border: 1px solid var(--color-accent);
 }
 
 .guesses {
@@ -38,21 +40,26 @@
     min-height: 100%;
     max-height: fit-content;
     border-radius: 4px; 
-    background: #fff;
+    background: var(--color-primary);
+    border: 1px solid var(--color-secondary);
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
 .incorrect-guess,
 .correct-guess {
-    color: #000;
+    color: var(--color-text);
     margin-top: 4px;
     margin-bottom: 6px; 
 }
 
 .correct-guess a {
-    color: #000;
+    color: var(--color-text);
     text-decoration: none;
+}
+
+.correct-guess a:hover {
+    text-decoration: underline;
 }
 
 .incorrect-guess:last-child,
@@ -64,20 +71,32 @@
     justify-self: center;
 }
 
-.incorrect-guess-text,
+.incorrect-guess-text {
+    padding: 10px;
+    background-color: var(--color-secondary);
+    border-radius: 4px;
+    margin: 2px 4px;
+}
+
 .correct-guess-text {
     padding: 10px;
+    background-color: var(--color-accent);
+    color: #fff;
+    border-radius: 4px;
+    margin: 2px 4px;
 }
 
 .incorrect-guesses-header {
     width: 80%;
-    height: 30px;
+    height: 32px;
     border-radius: 4px;
-    background: #c08888;
+    background: var(--color-secondary);
     font-size: 16px;
     text-align: center;
-    color: #fff;
+    color: var(--color-text);
     display: flex;              
     justify-content: center;   
-    align-items: center;  
+    align-items: center;
+    font-weight: 500;
+    border: 1px solid var(--color-secondary);
 }

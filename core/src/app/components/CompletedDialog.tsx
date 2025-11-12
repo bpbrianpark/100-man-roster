@@ -117,7 +117,7 @@ if (gameType === "Normal") {
             <X size={20} />
           </button>
 
-          <div className="congrats-title">🎉 Congratulations! 🎉</div>
+          <div className="congrats-title">Congratulations!</div>
 
           <div className="score-details">
             <div className="score-item">
@@ -150,7 +150,7 @@ if (gameType === "Normal") {
 
           {!isLoggedIn && (
             <div className="login-message">
-              💡 Register an account to save your scores to the leaderboard!
+              Register an account to save your scores to the leaderboard!
             </div>
           )}
         </div>

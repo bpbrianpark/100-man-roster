@@ -228,7 +228,7 @@ export default function BlitzGame({
         {status !== "loading" && !session && (
           <div className="not-logged-in-container">
             <p className="not-logged-in-text">
-              ⚠️ You are not logged in. Your score will not be recorded.{" "}
+              You are not logged in. Your score will not be recorded.{" "}
               <Link href="/sign-up" className="not-logged-in-link">
                 Click here to register
               </Link>
@@ -240,13 +240,13 @@ export default function BlitzGame({
         <div className="completed-game-message-container">
           {givenUp && (
             <span className="completed-game-message">
-              ❌ You gave up. Try again! ❌
+              You gave up. Try again!
             </span>
           )}
 
           {isGameCompleted && isLoggedIn && (
             <span className="completed-game-message">
-              Check how you did on the leaderboard! ✅
+              Check how you did on the leaderboard!
             </span>
           )}
         </div>

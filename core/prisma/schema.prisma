@@ -34,6 +34,10 @@ model Category {
   updateSparql String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt 
+  tags String[]?
+  playedOn DateTime?
+  isDaily Boolean?
+  hasBeenSelected Boolean?
 
   entries   Entry[]
   difficulties  Difficulty[]

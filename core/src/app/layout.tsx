@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import NavBar from "./components/NavBar";
@@ -7,6 +8,7 @@ import Provider from "./components/Provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import Footer from "./components/Footer";
+import AdSlot from "./components/AdSlot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +32,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions)
+  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+  const bottomAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
   
   return (
     <html lang="en">
       <body>
+        {adsenseClient ? (
+          <Script
+            id="adsense-loader"
+            strategy="afterInteractive"
+            async
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          />
+        ) : null}
         <Provider>
         <NavBar />
         {children}
+        {bottomAdSlot ? (
+          <AdSlot slot={bottomAdSlot} className="bottom-banner-ad" />
+        ) : null}
         <Footer />
         <Analytics />
         </Provider>

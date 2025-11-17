@@ -1,6 +1,6 @@
 'use client'
 
-import './leaderboard.css'
+import "./leaderboard.css";
 
 import useSWR from "swr";
 import { useState, useMemo } from "react";
@@ -8,6 +8,7 @@ import DifficultyPicker from "./DifficultyPicker";
 import { DifficultyType, GameType, LeaderboardPropsType } from "./types";
 import Link from "next/link";
 import { TopEntriesPanel } from "./TopEntriesPanel";
+import AdSlot from "./AdSlot";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -88,9 +89,23 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
     }, [games]);
 
     const displayedGames = gameMode === 'blitz' ? blitzGames : normalGames;
+    const sideAdSlotId =
+        process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR ??
+        process.env.NEXT_PUBLIC_ADSENSE_SLOT_LEADERBOARD;
+    const bottomAdSlotId =
+        process.env.NEXT_PUBLIC_ADSENSE_SLOT_LEADERBOARD_BOTTOM ??
+        process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
 
     return (
-        <div className="leaderboard-grid">
+        <div className="leaderboard-page-shell">
+            <aside className="leaderboard-side-rail">
+                <AdSlot slot={sideAdSlotId} className="side-rail-ad" />
+            </aside>
+            <div className="leaderboard-center-column">
+            <div className="leaderboard-grid">
+            <div className="leaderboard-side-panel">
+                <TopEntriesPanel entries={topEntries} />
+            </div>
             <div className="leaderboard">
                 <h1 className="leaderboard-title">{category.name}</h1>
                 {category.isDaily === false && (
@@ -158,8 +173,14 @@ export default function Leaderboard({ category, difficulties, initialGames, slug
                     </table>
                 )}
             </div>
-
-            <TopEntriesPanel entries={topEntries} />
+            </div>
+            {bottomAdSlotId ? (
+                <AdSlot slot={bottomAdSlotId} className="bottom-banner-ad leaderboard-bottom-ad" />
+            ) : null}
+            </div>
+            <aside className="leaderboard-side-rail">
+                <AdSlot slot={sideAdSlotId} className="side-rail-ad" />
+            </aside>
         </div>
     );
 }

@@ -16,6 +16,7 @@ import LeaderboardButton from "./LeaderboardButton";
 import Timer from "./Timer";
 import StartButton from "./StartButton";
 import CompletedDialog from "./CompletedDialog";
+import AdSlot from "./AdSlot";
 
 export default function BlitzGame({
   aliases,
@@ -30,9 +31,22 @@ export default function BlitzGame({
   const { data: session, status } = useSession();
   const isLoggedIn = !!session;
   const router = useRouter();
+  const safeDifficulties = (difficulties ?? []) as DifficultyType[];
+  const safeEntries = entries ?? [];
+  const safeAliases = aliases ?? [];
+  const safeCategory = category;
+  const safeTotalEntries =
+    typeof totalEntries === "number" ? totalEntries : safeEntries.length;
+  const safeIsDynamic = Boolean(isDynamic);
+
+  if (!safeCategory) {
+    console.error("[BlitzGame] Missing category data; unable to render");
+    return null;
+  }
+
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyType | null>(
-      difficulties.length > 0 ? difficulties[0] : null
+      safeDifficulties.length > 0 ? safeDifficulties[0] : null
     );
   const [correctGuesses, setCorrectGuesses] = useState<EntryType[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState<string[]>([]);
@@ -44,7 +58,7 @@ export default function BlitzGame({
   const [showFinishedIndicator, setShowFinishedIndicator] = useState(false);
   const hasPostedRef = useRef(false);
 
-  const targetEntries = totalEntries;
+  const targetEntries = safeTotalEntries;
   const timeLimit = 60000;
   const username = session?.user?.username;
 
@@ -237,96 +251,106 @@ export default function BlitzGame({
     postGameData,
   ]);
 
+  const sideAdSlotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR;
+
   return (
-    <div className="quiz-container">
-      <div className="quiz-top-layer">
-        <div className="difficulty-picker-container">
-          <DifficultyPicker
-            difficulties={difficulties}
-            selectedDifficulty={selectedDifficulty}
-            onDifficultyChange={handleDifficultyChange}
-            disabled={isTargetEntriesGuessed}
-          ></DifficultyPicker>
-        </div>
+    <div className="quiz-page-shell">
+      <aside className="quiz-side-rail">
+        <AdSlot slot={sideAdSlotId} className="side-rail-ad" />
+      </aside>
+      <div className="quiz-center-column">
+        <div className="quiz-container">
+          <div className="quiz-top-layer">
+            <div className="difficulty-picker-container">
+              <DifficultyPicker
+                difficulties={safeDifficulties}
+                selectedDifficulty={selectedDifficulty}
+                onDifficultyChange={handleDifficultyChange}
+                disabled={isTargetEntriesGuessed}
+              ></DifficultyPicker>
+            </div>
 
-        <div className="category-name">{category.name}</div>
-        <Timer
-          isRunning={!isGameCompleted && gameStarted}
-          shouldReset={shouldReset}
-          timeLimit={timeLimit}
-          onResetComplete={handleTimerReset}
-          onTimeUpdate={handleTimerUpdate}
-          onTimeUp={handleTimeUp}
-        />
+            <div className="category-name">{safeCategory.name}</div>
+            <Timer
+              isRunning={!isGameCompleted && gameStarted}
+              shouldReset={shouldReset}
+              timeLimit={timeLimit}
+              onResetComplete={handleTimerReset}
+              onTimeUpdate={handleTimerUpdate}
+              onTimeUp={handleTimeUp}
+            />
 
-        <div className="give-up-restart-button-container">
-          <StartButton disabled={gameStarted} onStart={handleStart} />
-          <LeaderboardButton slug={slug} />
-          <RestartButton
-            disabled={!isGameCompleted}
-            onRestart={handleRestart}
-          />
-        </div>
+            <div className="give-up-restart-button-container">
+              <StartButton disabled={gameStarted} onStart={handleStart} />
+              <LeaderboardButton slug={slug} />
+              <RestartButton
+                disabled={!isGameCompleted}
+                onRestart={handleRestart}
+              />
+            </div>
 
-        {status !== "loading" && !session && (
-          <div className="not-logged-in-container">
-            <p className="not-logged-in-text">
-              You are not logged in. Your score will not be recorded.{" "}
-              <Link href="/sign-up" className="not-logged-in-link">
-                Click here to register
-              </Link>
-              .
-            </p>
+            {status !== "loading" && !session && (
+              <div className="not-logged-in-container">
+                <p className="not-logged-in-text">
+                  You are not logged in. Your score will not be recorded.{" "}
+                  <Link href="/sign-up" className="not-logged-in-link">
+                    Click here to register
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
+            {isGameCompleted && (
+              <div className="completed-game-message-container">
+                {givenUp && (
+                  <span className="completed-game-message">
+                    You gave up. Try again!
+                  </span>
+                )}
+
+                {isGameCompleted && isLoggedIn && (
+                  <span className="completed-game-message">
+                    Check how you did on the leaderboard!
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-        )}
-      {isGameCompleted && (
-        <div className="completed-game-message-container">
-          {givenUp && (
-            <span className="completed-game-message">
-              You gave up. Try again!
-            </span>
-          )}
 
-          {isGameCompleted && isLoggedIn && (
-            <span className="completed-game-message">
-              Check how you did on the leaderboard!
-            </span>
-          )}
-        </div>
-      )}
-      </div>
+          <div className="quiz-second-layer">
+            <GuessInput
+              aliases={safeAliases}
+              category={safeCategory}
+              disabled={!gameStarted}
+              entries={safeEntries}
+              isDynamic={safeIsDynamic}
+              isGameCompleted={isGameCompleted}
+              onCorrectGuess={handleCorrectGuess}
+              onIncorrectGuess={handleIncorrectGuess}
+            />
+          </div>
 
-      <div className="quiz-second-layer">
-        {category && (
-          <GuessInput
-            aliases={aliases}
-            category={category}
-            disabled={!gameStarted}
-            entries={entries}
-            isDynamic={isDynamic}
-            isGameCompleted={isGameCompleted}
-            onCorrectGuess={handleCorrectGuess}
-            onIncorrectGuess={handleIncorrectGuess}
+          <QuizTable
+            correctGuesses={correctGuesses}
+            incorrectGuesses={incorrectGuesses}
           />
-        )}
+
+          <CompletedDialog
+            isOpen={showFinishedIndicator}
+            onClose={handleCloseCongratsDialog}
+            finalTime={finalTime ?? 0}
+            correctGuesses={correctGuesses.length}
+            targetEntries={targetEntries}
+            categoryName={safeCategory.name}
+            difficultyName={selectedDifficulty?.name ?? "Unknown"}
+            isLoggedIn={isLoggedIn}
+            gameType={"Blitz"}
+          />
+        </div>
       </div>
-
-      <QuizTable
-        correctGuesses={correctGuesses}
-        incorrectGuesses={incorrectGuesses}
-      />
-
-      <CompletedDialog
-        isOpen={showFinishedIndicator}
-        onClose={handleCloseCongratsDialog}
-        finalTime={finalTime}
-        correctGuesses={correctGuesses.length}
-        targetEntries={targetEntries}
-        categoryName={category.name}
-        difficultyName={selectedDifficulty?.name}
-        isLoggedIn={isLoggedIn}
-        gameType={"Blitz"}
-      />
+      <aside className="quiz-side-rail">
+        <AdSlot slot={sideAdSlotId} className="side-rail-ad" />
+      </aside>
     </div>
   );
 }

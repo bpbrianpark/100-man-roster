@@ -1,3 +1,34 @@
+.quiz-page-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr) minmax(0, 200px);
+  gap: 24px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.quiz-center-column {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.quiz-side-rail {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 24px;
+}
+
+@media (max-width: 1024px) {
+  .quiz-page-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-side-rail {
+    display: none;
+  }
+}
+
 .quiz-container {
   display: flex;
   flex-direction: column;

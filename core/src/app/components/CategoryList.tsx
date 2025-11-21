@@ -3,8 +3,8 @@
 import CategoryButton from "./CategoryButton";
 import { CategoryType } from "./types";
 import AdSlot from "./AdSlot";
-import { Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import "./button.css";
 
 interface CategoryListProps {
@@ -24,7 +24,15 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
       <div className="category-center-column">
         <div className="categories-page-container">
           <div className="categories-header-section">
-            <h1 className="categories-main-title">Help me come up with a name please</h1>
+            <Image
+              src="/logo.svg"
+              alt="Recall Race logo"
+              width={72}
+              height={72}
+              className="categories-logo"
+              priority
+            />
+            <h1 className="categories-main-title">Recall Race</h1>
             <p className="categories-main-description">
               Challenge yourself with quizzes across different categories
             </p>

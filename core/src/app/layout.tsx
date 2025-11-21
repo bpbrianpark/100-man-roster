@@ -21,9 +21,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "test quiz",
-  description: "quiz",
+  title: "Recall Race",
+  description:
+    "Recall Race is a fast-paced trivia experience—pick a category, race the clock, and climb the leaderboards.",
   viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+  openGraph: {
+    title: "Recall Race",
+    description:
+      "Challenge yourself to name as many items as possible before the timer hits zero.",
+    url: "https://recallrace.com",
+    siteName: "Recall Race",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Recall Race",
+    description:
+      "Race the clock and test your knowledge across dozens of categories.",
+  },
+  icons: {
+    icon: "/logo.svg",
+  }
 };
 
 export default async function RootLayout({

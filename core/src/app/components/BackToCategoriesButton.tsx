@@ -14,7 +14,7 @@ export default function BackToCategoriesButton() {
   return (
     <button onClick={handleClick} className="header-button">
       <ArrowLeft className="header-button-icon" />
-      Back to Categories
+      Categories
     </button>
   );
 }

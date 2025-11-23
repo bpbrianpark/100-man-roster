@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import './leaderboard.css';
+import "./leaderboard.css";
 
 type EntrySummary = {
   id: string;
@@ -15,7 +15,7 @@ interface TopEntriesPanelProps {
 export function TopEntriesPanel({ entries }: TopEntriesPanelProps) {
   const maxCount = entries.reduce(
     (max, entry) => (entry.count > max ? entry.count : max),
-    0
+    0,
   );
 
   return (
@@ -50,4 +50,3 @@ export function TopEntriesPanel({ entries }: TopEntriesPanelProps) {
     </div>
   );
 }
-

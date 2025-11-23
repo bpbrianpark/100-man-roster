@@ -3,7 +3,7 @@ import {
   generateAllCategories,
   PropertyMap,
   ValueMaps,
-  NameMap
+  NameMap,
 } from "./category-generator";
 
 // Name mappings: Maps value labels to category name constituents (ex. Male -> "Male", Singer -> "Singer from")
@@ -216,7 +216,7 @@ const propertyMap: PropertyMap = {
   film_director_list: "wdt:P57",
 };
 
-// Value mappings: Maps property names to dictionaries of value labels and QIDs 
+// Value mappings: Maps property names to dictionaries of value labels and QIDs
 // remember to fix all of these, not all are correct
 const valueMaps: ValueMaps = {
   // Singer/Politician/Actor/Scientist/Director/Writer based on Nationality
@@ -260,13 +260,12 @@ const valueMaps: ValueMaps = {
     james_cameron: "Q42574",
   },
 
-
   // video games on consoles
   video_game_instance_of_list: {
     video_game: "Q7889",
   },
   video_game_console_list: {
-    nintendo_switch: "Q19610114",    
+    nintendo_switch: "Q19610114",
     playstation_5: "Q63184502",
     xbox_series_x: "Q64513817",
     pc: "Q1406",
@@ -463,7 +462,7 @@ async function createCategories() {
       propertyMap,
       valueMaps,
       nameMap,
-      combinations
+      combinations,
     );
 
     console.log(`Generated ${generatedCategories.length} categories`);

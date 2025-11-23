@@ -1,284 +1,288 @@
 :root {
-  --color-primary: #F9F7F7;
-  --color-secondary: #DBE2EF;
-  --color-accent: #73AF6F;
-  --color-text: #112D4E;
-  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-white: #F9F7F7;
-  --font-dark: #112D4E;
+  --color-primary: #f9f7f7;
+  --color-secondary: #dbe2ef;
+  --color-accent: #73af6f;
+  --color-text: #112d4e;
+  --font-main:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-white: #f9f7f7;
+  --font-dark: #112d4e;
   --shadow-subtle: 0 2px 8px rgba(17, 45, 78, 0.08);
   --shadow-elevated: 0 4px 16px rgba(17, 45, 78, 0.12);
-  --border-light: #DBE2EF;
+  --border-light: #dbe2ef;
   --error-color: #dc2626;
   --error-bg: #fef2f2;
   --overlay-color: rgba(17, 45, 78, 0.5);
   --success-color: #059669;
   --success-color-light: #047857;
   --dark-bg: rgba(219, 226, 239, 0.3);
-  --blue-color: #73AF6F;
+  --blue-color: #73af6f;
   --yellow-bright: #059669;
-  --yellow-bg: rgba(5, 150, 105, 0.1); 
+  --yellow-bg: rgba(5, 150, 105, 0.1);
   --yellow-overlay: rgba(5, 150, 105, 0.2);
 }
 
 body {
-    background-color: var(--color-primary);
-    margin: 0;
-    font-family: var(--font-main);
-    color: var(--color-text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-primary);
+  margin: 0;
+  font-family: var(--font-main);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
-    font-family: var(--font-main);
+  font-family: var(--font-main);
 }
 
 .stopwatch-time,
 .timer-time {
-    font-family: 'Courier New', monospace !important;
+  font-family: "Courier New", monospace !important;
 }
 
-
-
 main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 @media (min-width: 769px) {
-    main {
-        padding: 0 24px;
-    }
+  main {
+    padding: 0 24px;
+  }
 }
 
 .categories-page-container {
-    margin: 0 auto;
-    width: 90%;
-    padding: 24px;
+  margin: 0 auto;
+  width: 90%;
+  padding: 24px;
 }
 
 .categories-header-section {
-    text-align: center;
-    margin-bottom: 48px;
+  text-align: center;
+  margin-bottom: 48px;
 }
 
 .categories-logo {
-    display: inline-block;
-    margin-bottom: 16px;
+  display: inline-block;
+  margin-bottom: 16px;
 }
 
 .categories-main-title {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0 0 16px 0;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 16px 0;
 }
 
 .categories-main-description {
-    font-size: 1.25rem;
-    color: var(--color-text);
-    opacity: 0.7;
-    margin: 0 0 24px 0;
+  font-size: 1.25rem;
+  color: var(--color-text);
+  opacity: 0.7;
+  margin: 0 0 24px 0;
 }
 
 .categories-header-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .categories-content {
-    width: 100%;
+  width: 100%;
 }
 
 .category-page-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 200px) minmax(0, 1fr) minmax(0, 200px);
-    gap: 24px;
-    width: 100%;
-    align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr) minmax(0, 200px);
+  gap: 24px;
+  width: 100%;
+  align-items: flex-start;
 }
 
 .category-center-column {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .category-side-rail {
-    display: flex;
-    justify-content: center;
-    padding-top: 24px;
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
 }
 
 @media (max-width: 1024px) {
-    .category-page-shell {
-        grid-template-columns: 1fr;
-    }
+  .category-page-shell {
+    grid-template-columns: 1fr;
+  }
 
-    .category-side-rail {
-        display: none;
-    }
+  .category-side-rail {
+    display: none;
+  }
 }
 
 .categories-header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .categories-title {
-    font-size: 36px;
-    font-weight: 600;
-    color: var(--color-text);
-    margin: 0 0 12px 0;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 12px 0;
 }
 
 .categories-description {
-    font-size: 18px;
-    color: var(--color-text);
-    opacity: 0.8;
-    margin: 0;
+  font-size: 18px;
+  color: var(--color-text);
+  opacity: 0.8;
+  margin: 0;
 }
 
 .daily-challenge-section {
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .daily-challenge-button {
-    display: block;
-    text-decoration: none;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--success-color) 100%);
-    border: 2px solid var(--color-accent);
-    box-shadow: var(--shadow-elevated);
-    transition: all 0.3s ease;
-    cursor: pointer;
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--success-color) 100%
+  );
+  border: 2px solid var(--color-accent);
+  box-shadow: var(--shadow-elevated);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .daily-challenge-button:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
-    border-color: var(--success-color-light);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+  border-color: var(--success-color-light);
 }
 
 .daily-challenge-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 32px;
 }
 
 .daily-challenge-icon {
-    font-size: 48px;
-    line-height: 1;
+  font-size: 48px;
+  line-height: 1;
 }
 
 .daily-challenge-text {
-    flex: 1;
-    text-align: left;
+  flex: 1;
+  text-align: left;
 }
 
 .daily-challenge-title {
-    margin: 0 0 8px 0;
-    font-size: 28px;
-    font-weight: 600;
-    color: white;
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: white;
 }
 
 .daily-challenge-description {
-    margin: 0;
-    font-size: 16px;
-    color: white;
-    opacity: 0.95;
+  margin: 0;
+  font-size: 16px;
+  color: white;
+  opacity: 0.95;
 }
 
 @media (max-width: 768px) {
-    .daily-challenge-section {
-        margin-bottom: 32px;
-    }
+  .daily-challenge-section {
+    margin-bottom: 32px;
+  }
 
-    .daily-challenge-content {
-        padding: 20px 24px;
-        gap: 16px;
-    }
+  .daily-challenge-content {
+    padding: 20px 24px;
+    gap: 16px;
+  }
 
-    .daily-challenge-icon {
-        font-size: 40px;
-    }
+  .daily-challenge-icon {
+    font-size: 40px;
+  }
 
-    .daily-challenge-title {
-        font-size: 24px;
-    }
+  .daily-challenge-title {
+    font-size: 24px;
+  }
 
-    .daily-challenge-description {
-        font-size: 14px;
-    }
+  .daily-challenge-description {
+    font-size: 14px;
+  }
 }
 
 .category-link-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-    width: 100%;
-    padding-top: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+  padding-top: 0;
 }
 
 @media (min-width: 1200px) {
-    .category-link-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+  .category-link-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-    .categories-page-container {
-        padding: 16px;
-    }
+  .categories-page-container {
+    padding: 16px;
+  }
 
-    .categories-header-section {
-        margin-bottom: 32px;
-    }
+  .categories-header-section {
+    margin-bottom: 32px;
+  }
 
-    .categories-main-title {
-        font-size: 2rem;
-    }
+  .categories-main-title {
+    font-size: 2rem;
+  }
 
-    .categories-main-description {
-        font-size: 1rem;
-    }
+  .categories-main-description {
+    font-size: 1rem;
+  }
 
-    .categories-header-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .categories-header-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    .category-link-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
+  .category-link-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1199px) {
-    .category-link-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .category-link-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .category-link-grid a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh; 
+  height: 60vh;
 }
 
 .spinner {

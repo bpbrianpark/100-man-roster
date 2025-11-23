@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!slug || !difficultyId) {
     return NextResponse.json(
       { error: "Games not found for category or difficulty." },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -30,11 +30,8 @@ export async function GET(req: NextRequest) {
         },
       },
     },
-    orderBy: [
-      { correct_count: 'desc' },
-      { time: 'asc' }
-    ],
-    take: 25, 
+    orderBy: [{ correct_count: "desc" }, { time: "asc" }],
+    take: 25,
   });
 
   if (!games || games.length === 0) {
@@ -42,7 +39,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Map games to include username for backward compatibility
-  const gamesWithUsername = games.map(game => ({
+  const gamesWithUsername = games.map((game) => ({
     id: game.id,
     userId: game.userId,
     username: game.user.username,
@@ -63,14 +60,15 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) {
-      console.warn("[/api/games] Guest submission ignored for game persistence");
-      return NextResponse.json(
-        { ok: true, guest: true },
-        { status: 200 }
+      console.warn(
+        "[/api/games] Guest submission ignored for game persistence",
       );
+      return NextResponse.json({ ok: true, guest: true }, { status: 200 });
     }
 
     const body = await req.json();
@@ -106,7 +104,7 @@ export async function POST(req: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Missing required field." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

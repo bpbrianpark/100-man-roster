@@ -117,7 +117,9 @@
   border-radius: 6px;
   text-align: center;
   border: 2px solid var(--color-secondary);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .stat-card:hover {

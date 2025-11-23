@@ -1,4 +1,4 @@
-import { Alias, Category, Difficulty, Entry, Game, User } from '@prisma/client';
+import { Alias, Category, Difficulty, Entry, Game, User } from "@prisma/client";
 
 export interface UserType {
   id: number;
@@ -14,16 +14,15 @@ export interface CategoryType {
   slug: string;
   name: string;
   sparql: string;
-  imageUrl?: string | null;      
+  imageUrl?: string | null;
   isDynamic: boolean;
-  updateSparql?: string | null;  
+  updateSparql?: string | null;
   createdAt: Date;
   updatedAt: Date;
   isDaily?: boolean | null;
   hasBeenSelected?: boolean | null;
   playedOn?: Date | null;
 }
-
 
 export interface DifficultyType {
   id: string;
@@ -79,21 +78,21 @@ export interface GuessInputProps {
   onIncorrectGuess: (guess: string) => void;
 }
 
-export interface LeaderboardPropsType { 
-    category: Category;
-    difficulties: Difficulty[];
-    initialGames: Game[];
-    slug: string;
+export interface LeaderboardPropsType {
+  category: Category;
+  difficulties: Difficulty[];
+  initialGames: Game[];
+  slug: string;
 }
 
-export interface QuizGameClientPropsType { 
+export interface QuizGameClientPropsType {
   aliases?: Alias[];
-    category?: Category;
-    difficulties?: Difficulty[]
-    entries?: Entry[];
-    totalEntries?: number; 
-    slug: string;
-    isDynamic?: boolean;
+  category?: Category;
+  difficulties?: Difficulty[];
+  entries?: Entry[];
+  totalEntries?: number;
+  slug: string;
+  isDynamic?: boolean;
 }
 
 export interface QuizTablePropsType {
@@ -114,14 +113,14 @@ export interface CompletedDialogPropsType {
   finalTime: number;
   correctGuesses: number;
   targetEntries: number;
-  categoryName: string,
-  difficultyName: string,
-  isLoggedIn: boolean,
-  gameType: string
+  categoryName: string;
+  difficultyName: string;
+  isLoggedIn: boolean;
+  gameType: string;
 }
 
 export interface InfoDialogPropsType {
-  isOpen: boolean,
-  onClose: () => void,
-  gameType?: string
+  isOpen: boolean;
+  onClose: () => void;
+  gameType?: string;
 }

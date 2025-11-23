@@ -72,7 +72,10 @@ export default function SignUpForm() {
 
       // Check if email confirmation is required
       if (data.requiresConfirmation) {
-        setError(data.message || "Please check your email to confirm your account before signing in.");
+        setError(
+          data.message ||
+            "Please check your email to confirm your account before signing in.",
+        );
         triggerErrorEffect();
         setLoading(false);
         return;
@@ -98,10 +101,17 @@ export default function SignUpForm() {
       } else {
         const signInData = await signInResponse.json();
         // Check if it's an email confirmation issue
-        if (signInData.error?.includes('email') || signInData.error?.includes('confirm')) {
-          setError("Please check your email to confirm your account before signing in.");
+        if (
+          signInData.error?.includes("email") ||
+          signInData.error?.includes("confirm")
+        ) {
+          setError(
+            "Please check your email to confirm your account before signing in.",
+          );
         } else {
-          setError("Registration successful, but auto sign-in failed. Please sign in manually.");
+          setError(
+            "Registration successful, but auto sign-in failed. Please sign in manually.",
+          );
         }
         triggerErrorEffect();
       }
@@ -119,72 +129,72 @@ export default function SignUpForm() {
   };
 
   return (
-      <div className="register-dialog">
-        <form onSubmit={handleSubmit}>
-          <span className="enter-username-text">Create Account</span>
+    <div className="register-dialog">
+      <form onSubmit={handleSubmit}>
+        <span className="enter-username-text">Create Account</span>
 
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email..."
-            className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
-            autoFocus
-            disabled={loading}
-          />
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email..."
+          className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
+          autoFocus
+          disabled={loading}
+        />
 
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username..."
-            className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
-            disabled={loading}
-          />
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username..."
+          className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
+          disabled={loading}
+        />
 
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password..."
-            className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
-            disabled={loading}
-          />
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password..."
+          className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
+          disabled={loading}
+        />
 
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm your password..."
-            className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
-            disabled={loading}
-          />
+        <input
+          type="password"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Confirm your password..."
+          className={`register-input ${showErrorEffect ? "error-fade" : ""}`}
+          disabled={loading}
+        />
 
-          <button
-            type="submit"
-            className={`register-submit-btn ${loading ? "loading" : ""}`}
-            disabled={loading}
+        <button
+          type="submit"
+          className={`register-submit-btn ${loading ? "loading" : ""}`}
+          disabled={loading}
+        >
+          {loading ? "Creating Account..." : "Create Account"}
+        </button>
+
+        <p className={`input-error ${!error ? "empty" : ""}`}>
+          {error ?? "placeholder"}
+        </p>
+
+        <div className="auth-links">
+          <span>Already have an account? </span>
+          <Link
+            href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}
           >
-            {loading ? "Creating Account..." : "Create Account"}
-          </button>
-
-          <p className={`input-error ${!error ? "empty" : ""}`}>
-            {error ?? "placeholder"}
-          </p>
-
-          <div className="auth-links">
-            <span>Already have an account? </span>
-            <Link
-              href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}
-            >
-              Sign in
-            </Link>
-          </div>
-        </form>
-      </div>
+            Sign in
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 }

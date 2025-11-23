@@ -1,6 +1,6 @@
 import "./stopwatch.css";
 
-import { useState, useEffect, useRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, useImperativeHandle } from "react";
 
 interface StopwatchProps {
   isRunning?: boolean;
@@ -14,11 +14,16 @@ function formatTime(milliseconds: number): string {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-  
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export default function Stopwatch({ isRunning = true, shouldReset, onResetComplete, onTimeUpdate }: StopwatchProps) {
+export default function Stopwatch({
+  isRunning = true,
+  shouldReset,
+  onResetComplete,
+  onTimeUpdate,
+}: StopwatchProps) {
   const [time, setTime] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(Date.now());
@@ -28,20 +33,20 @@ export default function Stopwatch({ isRunning = true, shouldReset, onResetComple
       setTime(0);
       onResetComplete?.();
     }
-  }, [shouldReset])
+  }, [shouldReset]);
 
   useEffect(() => {
     if (isRunning) {
       startTimeRef.current = Date.now() - time;
-      
+
       intervalRef.current = setInterval(() => {
         const currentTime = Date.now() - startTimeRef.current;
         setTime(currentTime);
-        
+
         if (onTimeUpdate) {
           onTimeUpdate(currentTime);
         }
-      }, 10); 
+      }, 10);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -56,9 +61,5 @@ export default function Stopwatch({ isRunning = true, shouldReset, onResetComple
     };
   }, [isRunning, onTimeUpdate, time]);
 
-  return (
-      <div className="stopwatch-time">
-        {formatTime(time)}
-      </div>
-  );
+  return <div className="stopwatch-time">{formatTime(time)}</div>;
 }

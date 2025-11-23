@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (existingUserByUsername) {
       return NextResponse.json(
         { user: null, message: "Username already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
           message: authError?.message || "Registration failed",
           error: authError,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
             session: authData.session,
             requiresConfirmation: false,
           },
-          { status: 201 }
+          { status: 201 },
         );
       }
 
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
           message:
             "Please check your email to confirm your account before signing in.",
         },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (dbError) {
       console.error("Database error:", dbError);
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
           message: "Failed to create user profile",
           error: dbError instanceof Error ? dbError.message : String(dbError),
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (e) {
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
         message: "User was not created",
         error: e instanceof Error ? e.message : String(e),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

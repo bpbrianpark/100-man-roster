@@ -54,7 +54,7 @@
     height: 80vh;
     max-height: calc(100vh - 32px);
     overflow-y: auto;
-    margin-bottom: 25%
+    margin-bottom: 25%;
   }
 
   .congrats-title {
@@ -96,7 +96,9 @@
   justify-content: center;
   cursor: pointer;
   color: var(--color-text);
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   padding: 6px;
   box-sizing: border-box;
 }
@@ -153,7 +155,7 @@
 
 .info-label {
   font-weight: 600;
-  color: var(--font-dark)
+  color: var(--font-dark);
 }
 
 .score-value {
@@ -274,7 +276,11 @@
   padding: 32px 32px 24px;
   text-align: center;
   border-bottom: 2px solid var(--color-secondary);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
 }
 
 .info-dialog-title {

@@ -9,7 +9,7 @@ const nextConfig = {
   },
   experimental: {
     turbo: false,
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma']
+    serverComponentsExternalPackages: ["@prisma/client", "prisma"],
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -23,6 +23,6 @@ const nextConfig = {
     }
     return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

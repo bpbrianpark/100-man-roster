@@ -10,12 +10,7 @@ const SPECIAL_CASES: Map<string, Map<string, string>> = new Map([
       ["nidoranfemale", "Nidoran♀"],
     ]),
   ],
-  [
-    "humans_men",
-    new Map([
-      ["eminem", "Marshall Mathers"],
-    ]),
-  ],
+  ["humans_men", new Map([["eminem", "Marshall Mathers"]])],
 ]);
 
 export function transformGuess(categorySlug: string, guess: string): string {
@@ -29,4 +24,3 @@ export function transformGuess(categorySlug: string, guess: string): string {
 
   return transformed ?? guess;
 }
-

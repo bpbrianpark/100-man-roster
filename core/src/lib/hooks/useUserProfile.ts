@@ -1,6 +1,6 @@
-'use client';
-import { useAuth } from './useAuth';
-import { useEffect, useState } from 'react';
+"use client";
+import { useAuth } from "./useAuth";
+import { useEffect, useState } from "react";
 
 interface UserProfile {
   id: string;
@@ -27,8 +27,8 @@ export function useUserProfile() {
 
     // Fetch user profile with username from database
     fetch(`/api/user/profile?userId=${user.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.user) {
           setProfile(data.user);
         } else {
@@ -45,4 +45,3 @@ export function useUserProfile() {
 
   return { profile, loading: loading || authLoading };
 }
-

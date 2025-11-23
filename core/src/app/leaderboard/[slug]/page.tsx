@@ -10,14 +10,14 @@ export default async function LeaderboardPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  
+
   const category = await prisma.category.findUnique({
     where: { slug },
     include: {
       difficulties: {
-        orderBy: { level: 'asc' }
-      }
-    }
+        orderBy: { level: "asc" },
+      },
+    },
   });
 
   if (!category) {
@@ -36,15 +36,12 @@ export default async function LeaderboardPage({
         },
       },
     },
-    orderBy: [
-      { correct_count: 'desc' },
-      { time: 'asc' }
-    ],
-    take: 25
+    orderBy: [{ correct_count: "desc" }, { time: "asc" }],
+    take: 25,
   });
 
   // Map games to include username for backward compatibility
-  const gamesWithUsername = initialGames.map(game => ({
+  const gamesWithUsername = initialGames.map((game) => ({
     id: game.id,
     userId: game.userId,
     username: game.user.username,

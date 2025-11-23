@@ -12,16 +12,19 @@ export async function GET(request: Request) {
 
   try {
     const slug = await selectDailyCategory();
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       slug,
-      timestamp: new Date().toISOString() 
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error selecting daily category:", error);
     return NextResponse.json(
-      { error: "Failed to select daily category", details: error instanceof Error ? error.message : String(error) },
-      { status: 500 }
+      {
+        error: "Failed to select daily category",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
     );
   }
 }

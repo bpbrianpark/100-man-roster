@@ -71,7 +71,7 @@ export default function QuizGame({
 
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyType | null>(
-      safeDifficulties.length > 0 ? safeDifficulties[0] : null
+      safeDifficulties.length > 0 ? safeDifficulties[0] : null,
     );
   const [correctGuesses, setCorrectGuesses] = useState<EntryType[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState<string[]>([]);
@@ -101,7 +101,7 @@ export default function QuizGame({
 
       setCorrectGuesses((prev) => [...prev, guess]);
     },
-    [correctGuesses]
+    [correctGuesses],
   );
 
   const handleDifficultyChange = useCallback((difficulty: DifficultyType) => {
@@ -126,7 +126,7 @@ export default function QuizGame({
 
       setIncorrectGuesses((prev) => [...prev, guess]);
     },
-    [incorrectGuesses]
+    [incorrectGuesses],
   );
 
   const handleStart = useCallback(() => {
@@ -164,13 +164,16 @@ export default function QuizGame({
     async (time?: number) => {
       console.log("Posting This: ", correctGuesses.length);
       if (correctGuesses.length === 0) {
-        console.warn("[QuizGame] Skipping game post because there are no correct guesses", {
-          slug,
-          difficultyId: selectedDifficulty?.id,
-          time,
-          targetEntries,
-          givenUp,
-        });
+        console.warn(
+          "[QuizGame] Skipping game post because there are no correct guesses",
+          {
+            slug,
+            difficultyId: selectedDifficulty?.id,
+            time,
+            targetEntries,
+            givenUp,
+          },
+        );
         return;
       }
 
@@ -235,7 +238,7 @@ export default function QuizGame({
         console.error("[QuizGame] Error posting tally payload", error);
       }
     },
-    [user, slug, selectedDifficulty, targetEntries, correctGuesses]
+    [user, slug, selectedDifficulty, targetEntries, correctGuesses],
   );
 
   const handleStopwatchUpdate = useCallback(
@@ -254,7 +257,7 @@ export default function QuizGame({
         }
       }
     },
-    [givenUp, isTargetEntriesGuessed, finalTime, postGameData]
+    [givenUp, isTargetEntriesGuessed, finalTime, postGameData],
   );
 
   useEffect(() => {
@@ -276,22 +279,21 @@ export default function QuizGame({
     postGameData,
   ]);
 
-
   useEffect(() => {
-  if (isTargetEntriesGuessed || givenUp) {
-    setShowFinishedIndicator(true);
-  }
-}, [isTargetEntriesGuessed, givenUp]);
+    if (isTargetEntriesGuessed || givenUp) {
+      setShowFinishedIndicator(true);
+    }
+  }, [isTargetEntriesGuessed, givenUp]);
 
   const isDaily = safeCategory.isDaily === true;
 
   const getDailyLabel = () => {
     if (!isDaily) return "Rush";
     const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-US', { 
-      month: 'long', 
-      day: 'numeric', 
-      year: 'numeric' 
+    const formattedDate = today.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     });
     return `Daily Challenge: ${formattedDate}`;
   };
@@ -312,7 +314,10 @@ export default function QuizGame({
             <div className="quiz-header-row">
               <h1 className="category-name">{safeCategory.name}</h1>
               <div className="quiz-header-actions">
-                <button onClick={handleOpenInfoDialog} className="header-button">
+                <button
+                  onClick={handleOpenInfoDialog}
+                  className="header-button"
+                >
                   <CircleQuestionMark className="header-button-icon" />
                   How to Play
                 </button>
@@ -334,7 +339,7 @@ export default function QuizGame({
                   onTimeUpdate={handleStopwatchUpdate}
                 />
               </div>
-              
+
               <div className="controls-row">
                 <DifficultySelect
                   difficulties={safeDifficulties}
@@ -344,9 +349,9 @@ export default function QuizGame({
                   isDaily={isDaily}
                 />
 
-                <StartButton 
-                  disabled={!isDaily || gameStarted || isGameCompleted} 
-                  onStart={handleStart} 
+                <StartButton
+                  disabled={!isDaily || gameStarted || isGameCompleted}
+                  onStart={handleStart}
                 />
 
                 <div className="control-buttons-group">

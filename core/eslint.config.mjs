@@ -18,15 +18,15 @@ const eslintConfig = [
       "next-env.d.ts",
       "src/generated/**",
       ".next/",
-      "node_modules/"
+      "node_modules/",
     ],
     rules: {
-      "@typescript-eslint/no-unused-vars": "off", 
+      "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-expressions": "off", 
-      "@typescript-eslint/ban-ts-comment": "off", 
-      "react-hooks/exhaustive-deps": "off", 
-      "@next/next/no-img-element": "off", 
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "@next/next/no-img-element": "off",
     },
   },
 ];

@@ -13,9 +13,8 @@ export default function HeroSection() {
         <h1 className="hero-title">Test Your Knowledge</h1>
         <p className="hero-subtitle">
           How many (x) can you name in (x) amount of time?
-          
-          {isLoggedIn 
-            ? ` Welcome back, ${profile?.username}!` 
+          {isLoggedIn
+            ? ` Welcome back, ${profile?.username}!`
             : " Sign up to track your scores and compete on leaderboards."}
         </p>
         <div className="hero-cta">
@@ -32,4 +31,3 @@ export default function HeroSection() {
     </div>
   );
 }
-

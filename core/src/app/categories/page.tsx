@@ -12,10 +12,9 @@ export default async function CategoriesPage() {
       id: true,
       slug: true,
       name: true,
-      imageUrl: true
+      imageUrl: true,
     },
   });
 
   return <CategoryList initialCategories={categories} />;
 }
-

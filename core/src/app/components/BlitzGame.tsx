@@ -49,7 +49,7 @@ export default function BlitzGame({
 
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyType | null>(
-      safeDifficulties.length > 0 ? safeDifficulties[0] : null
+      safeDifficulties.length > 0 ? safeDifficulties[0] : null,
     );
   const [correctGuesses, setCorrectGuesses] = useState<EntryType[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState<string[]>([]);
@@ -81,7 +81,7 @@ export default function BlitzGame({
 
       setCorrectGuesses((prev) => [...prev, guess]);
     },
-    [correctGuesses]
+    [correctGuesses],
   );
 
   const handleDifficultyChange = useCallback((difficulty: DifficultyType) => {
@@ -103,7 +103,7 @@ export default function BlitzGame({
 
       setIncorrectGuesses((prev) => [...prev, guess]);
     },
-    [incorrectGuesses]
+    [incorrectGuesses],
   );
 
   const handleGiveUp = useCallback(() => {
@@ -190,7 +190,7 @@ export default function BlitzGame({
         console.error("Error posting tally payload", error);
       }
     },
-    [user, slug, selectedDifficulty, targetEntries, correctGuesses]
+    [user, slug, selectedDifficulty, targetEntries, correctGuesses],
   );
 
   const handleTimeUp = useCallback(() => {
@@ -216,7 +216,7 @@ export default function BlitzGame({
         }
       }
     },
-    [givenUp, isTargetEntriesGuessed, finalTime, timeLimit, postGameData]
+    [givenUp, isTargetEntriesGuessed, finalTime, timeLimit, postGameData],
   );
 
   const handleCloseCongratsDialog = useCallback(() => {
@@ -282,7 +282,10 @@ export default function BlitzGame({
             <div className="quiz-header-row">
               <h1 className="category-name">{safeCategory.name}</h1>
               <div className="quiz-header-actions">
-                <button onClick={handleOpenInfoDialog} className="header-button">
+                <button
+                  onClick={handleOpenInfoDialog}
+                  className="header-button"
+                >
                   <CircleQuestionMark className="header-button-icon" />
                 </button>
                 <LeaderboardButton slug={slug} />
@@ -305,7 +308,7 @@ export default function BlitzGame({
                   onTimeUp={handleTimeUp}
                 />
               </div>
-              
+
               <div className="controls-row">
                 <DifficultySelect
                   difficulties={safeDifficulties}
@@ -315,9 +318,9 @@ export default function BlitzGame({
                   isDaily={false}
                 />
 
-                <StartButton 
-                  disabled={gameStarted || isGameCompleted} 
-                  onStart={handleStart} 
+                <StartButton
+                  disabled={gameStarted || isGameCompleted}
+                  onStart={handleStart}
                 />
 
                 <div className="control-buttons-group">

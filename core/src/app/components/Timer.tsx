@@ -1,6 +1,6 @@
 import "./stopwatch.css";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 interface TimerProps {
   isRunning?: boolean;
@@ -8,18 +8,25 @@ interface TimerProps {
   timeLimit: number;
   onResetComplete?: () => void;
   onTimeUpdate?: (time: number) => void;
-  onTimeUp?: () => void; 
+  onTimeUp?: () => void;
 }
 
 function formatTime(milliseconds: number): string {
   const totalSeconds = Math.floor(milliseconds / 1000);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-  
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export default function Timer({ isRunning = true, shouldReset, timeLimit, onResetComplete, onTimeUpdate, onTimeUp }: TimerProps) {
+export default function Timer({
+  isRunning = true,
+  shouldReset,
+  timeLimit,
+  onResetComplete,
+  onTimeUpdate,
+  onTimeUp,
+}: TimerProps) {
   const [time, setTime] = useState(timeLimit);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(Date.now());
@@ -34,13 +41,13 @@ export default function Timer({ isRunning = true, shouldReset, timeLimit, onRese
   useEffect(() => {
     if (isRunning && time > 0) {
       startTimeRef.current = Date.now();
-      
+
       intervalRef.current = setInterval(() => {
         const elapsed = Date.now() - startTimeRef.current;
         const remainingTime = Math.max(0, time - elapsed);
-        
+
         setTime(remainingTime);
-        
+
         if (onTimeUpdate) {
           onTimeUpdate(remainingTime);
         }
@@ -52,7 +59,7 @@ export default function Timer({ isRunning = true, shouldReset, timeLimit, onRese
           }
           onTimeUp?.();
         }
-      }, 10); 
+      }, 10);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -67,9 +74,5 @@ export default function Timer({ isRunning = true, shouldReset, timeLimit, onRese
     };
   }, [isRunning, onTimeUpdate, onTimeUp, time]);
 
-  return (
-      <div className="stopwatch-time">
-        {formatTime(time)}
-      </div>
-  );
+  return <div className="stopwatch-time">{formatTime(time)}</div>;
 }

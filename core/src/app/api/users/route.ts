@@ -4,16 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 // Endpoint to retrieve all the users (for the leaderboard)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const slug = searchParams.get('slug');
-  const difficultyId = searchParams.get('difficultyId');
+  const slug = searchParams.get("slug");
+  const difficultyId = searchParams.get("difficultyId");
 
   if (!slug || !difficultyId) {
-    return NextResponse.json({ error: "Games not found for category or difficulty." }, { status: 404 });
+    return NextResponse.json(
+      { error: "Games not found for category or difficulty." },
+      { status: 404 },
+    );
   }
-    
+
   const game = await prisma.game.findMany({
-    where: { slug: slug,
-        difficultyId: difficultyId }
+    where: { slug: slug, difficultyId: difficultyId },
   });
 
   if (!game) {
@@ -30,8 +32,8 @@ export async function POST(req: NextRequest) {
 
     if (!username) {
       return NextResponse.json(
-        { message: 'Username is required '},
-        { status : 400 }
+        { message: "Username is required " },
+        { status: 400 },
       );
     }
 
@@ -39,8 +41,8 @@ export async function POST(req: NextRequest) {
       data: {
         username: username,
         email: "test@email.com",
-        password: "123456"
-      }
+        password: "123456",
+      },
     });
 
     return NextResponse.json({
@@ -48,13 +50,17 @@ export async function POST(req: NextRequest) {
       success: true,
       user: {
         id: newUser.id,
-        username: newUser.username
-      }
+        username: newUser.username,
+      },
     });
   } catch (e) {
-    return NextResponse.json({
-      isAvailable: false,
-      message: 'Could not post user.', e
-    }, { status: 409 })
+    return NextResponse.json(
+      {
+        isAvailable: false,
+        message: "Could not post user.",
+        e,
+      },
+      { status: 409 },
+    );
   }
 }

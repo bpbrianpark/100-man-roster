@@ -4,20 +4,20 @@ import { prisma } from "../../../../../lib/prisma";
 // Endpoint to retrieve everything about a category
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: { slug: string } },
 ) {
   const { slug } = params;
-    
+
   const category = await prisma.category.findUnique({
     where: { slug },
     include: {
       difficulties: true,
       entries: {
         include: {
-          aliases: true
-        }
-      }
-    }
+          aliases: true,
+        },
+      },
+    },
   });
 
   if (!category) {

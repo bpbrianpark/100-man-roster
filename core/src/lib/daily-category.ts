@@ -4,7 +4,9 @@ import { prismaAdmin } from "../../lib/prisma-admin";
 /*  Gets the daily category for today using a date-based seed. Returns the slug of the daily category. */
 export async function getDailyCategory(): Promise<string> {
   const now = new Date();
-  const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const todayUTC = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
 
   // Check if already selected today (read operation - use regular prisma)
   const todayCategory = await prisma.category.findFirst({
@@ -31,8 +33,10 @@ export async function getDailyCategory(): Promise<string> {
 // Extract the selection logic
 export async function selectDailyCategory(): Promise<string> {
   const now = new Date();
-  const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-  const todayISO = todayUTC.toISOString().split('T')[0];
+  const todayUTC = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  const todayISO = todayUTC.toISOString().split("T")[0];
   const seed = todayISO;
 
   // Check if already selected today (read operation - use regular prisma)
@@ -62,7 +66,7 @@ export async function selectDailyCategory(): Promise<string> {
       slug: true,
     },
     orderBy: {
-      id: 'asc',
+      id: "asc",
     },
   });
 
@@ -76,7 +80,7 @@ export async function selectDailyCategory(): Promise<string> {
     const allDailyCategories = await prisma.category.findMany({
       where: { isDaily: true },
       select: { id: true, slug: true },
-      orderBy: { id: 'asc' },
+      orderBy: { id: "asc" },
     });
 
     if (allDailyCategories.length === 0) {
@@ -115,9 +119,8 @@ function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; 
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
   }
   return Math.abs(hash);
 }
-

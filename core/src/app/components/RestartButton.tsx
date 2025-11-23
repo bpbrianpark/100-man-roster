@@ -1,19 +1,22 @@
-import './button.css'
-import { RotateCcw } from 'lucide-react';
+import "./button.css";
+import { RotateCcw } from "lucide-react";
 
 interface RestartButtonProps {
   onRestart: () => void;
   disabled?: boolean;
 }
 
-export default function RestartButton({ onRestart, disabled = false }: RestartButtonProps) {
+export default function RestartButton({
+  onRestart,
+  disabled = false,
+}: RestartButtonProps) {
   const handleSubmit = () => {
     if (disabled) return;
     onRestart();
-  }
+  };
 
   return (
-    <button 
+    <button
       onClick={handleSubmit}
       disabled={disabled}
       className="control-button control-button-secondary"

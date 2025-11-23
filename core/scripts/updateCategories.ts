@@ -1,9 +1,12 @@
-
 import { prismaAdmin as prisma } from "../lib/prisma-admin";
 import { queryWDQS } from "../lib/wdqs";
 import { normalize } from "path";
 
-async function updateCategory(category: { id: string; sparql: string; name: string }) {
+async function updateCategory(category: {
+  id: string;
+  sparql: string;
+  name: string;
+}) {
   console.log(`Updating category: ${category.name}`);
   try {
     const data = await queryWDQS(category.sparql);
@@ -37,7 +40,7 @@ async function main() {
   for (const category of categories) {
     await updateCategory(category);
   }
-  console.log("All categories updated.")
+  console.log("All categories updated.");
 }
 
 main()

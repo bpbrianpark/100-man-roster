@@ -6,7 +6,6 @@ import { getDailyCategory } from "../lib/daily-category";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  
   let slug: string;
   try {
     slug = await getDailyCategory();

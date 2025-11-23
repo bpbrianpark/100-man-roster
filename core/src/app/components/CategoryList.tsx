@@ -37,7 +37,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
               Challenge yourself with quizzes across different categories
             </p>
             <div className="categories-header-buttons">
-              <button 
+              <button
                 className="header-button"
                 onClick={() => router.push("/")}
               >

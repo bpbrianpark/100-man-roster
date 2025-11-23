@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Provider from "./components/Provider";
 import Footer from "./components/Footer";
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/logo.svg",
-  }
+  },
 };
 
 export default async function RootLayout({
@@ -49,7 +49,7 @@ export default async function RootLayout({
 }) {
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
   const bottomAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
-  
+
   return (
     <html lang="en">
       <body>
@@ -63,13 +63,13 @@ export default async function RootLayout({
           />
         ) : null}
         <Provider>
-        {children}
-        {bottomAdSlot ? (
-          <AdSlot slot={bottomAdSlot} className="bottom-banner-ad" />
-        ) : null}
-        <Footer />
-        <SpeedInsights />
-        <Analytics />
+          {children}
+          {bottomAdSlot ? (
+            <AdSlot slot={bottomAdSlot} className="bottom-banner-ad" />
+          ) : null}
+          <Footer />
+          <SpeedInsights />
+          <Analytics />
         </Provider>
       </body>
     </html>

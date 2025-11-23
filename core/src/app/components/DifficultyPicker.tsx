@@ -1,51 +1,55 @@
-import './difficulty-picker.css'
-import { DifficultyPickerProps } from './types';
+import "./difficulty-picker.css";
+import { DifficultyPickerProps } from "./types";
 
 function getDifficultyLabel(level: number): string {
   switch (level) {
     case 1:
-      return 'Easy';
+      return "Easy";
     case 2:
-      return 'Medium';
+      return "Medium";
     case 3:
-      return 'Hard';
+      return "Hard";
     case 4:
-        return 'Extreme';
+      return "Extreme";
     default:
       return `Level ${level}`;
   }
 }
 
-export default function DifficultyPicker({ 
-    difficulties, 
-    selectedDifficulty, 
-    onDifficultyChange,
-    disabled = false 
+export default function DifficultyPicker({
+  difficulties,
+  selectedDifficulty,
+  onDifficultyChange,
+  disabled = false,
 }: DifficultyPickerProps) {
-    const sortedDifficulties = [...difficulties].sort((a, b) => a.level - b.level);
+  const sortedDifficulties = [...difficulties].sort(
+    (a, b) => a.level - b.level,
+  );
 
-    return (
-        <div className="difficulty-picker">
-        
-            <div className="difficulty-options">
-                {sortedDifficulties.map((difficulty) => (
-                    <button
-                    key={difficulty.id}
-                    onClick={() => onDifficultyChange(difficulty)}
-                    disabled={disabled}
-                    className={`
+  return (
+    <div className="difficulty-picker">
+      <div className="difficulty-options">
+        {sortedDifficulties.map((difficulty) => (
+          <button
+            key={difficulty.id}
+            onClick={() => onDifficultyChange(difficulty)}
+            disabled={disabled}
+            className={`
                     difficulty-option
-                    ${selectedDifficulty?.id === difficulty.id 
-                        ? 'selected' 
-                        : 'unselected'
+                    ${
+                      selectedDifficulty?.id === difficulty.id
+                        ? "selected"
+                        : "unselected"
                     }
-                    ${disabled ? 'disabled' : ''}
+                    ${disabled ? "disabled" : ""}
                     `}
-                    >
-                        <span className="difficulty-level">{getDifficultyLabel(difficulty.level)}</span>
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
+          >
+            <span className="difficulty-level">
+              {getDifficultyLabel(difficulty.level)}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }

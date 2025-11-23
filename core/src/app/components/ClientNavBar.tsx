@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import "./navbar.css";
 import Link from "next/link";
@@ -15,20 +15,20 @@ export default function ClientNavBar() {
 
   const getUserInitials = (username: string) => {
     return username
-      .split(' ')
-      .map(name => name[0])
-      .join('')
+      .split(" ")
+      .map((name) => name[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   const handleClickInfoButton = useCallback(() => {
     setShowInfoDialog(true);
-  }, [showInfoDialog])
+  }, [showInfoDialog]);
 
   const handleCloseInfoDialog = useCallback(() => {
     setShowInfoDialog(false);
-  }, [showInfoDialog])
+  }, [showInfoDialog]);
 
   return (
     <div className="navbar-container">
@@ -38,49 +38,51 @@ export default function ClientNavBar() {
             <img src="/igloologoonly.png" alt="Home" className="home-icon" />
           </Link>
           <div className="info-button-mobile" onClick={handleClickInfoButton}>
-            <CircleQuestionMark size={24}/>
+            <CircleQuestionMark size={24} />
           </div>
         </div>
-          <div className="title-section">
-            <Link href="/">
-              <img src="/fullnamelogo.png" alt="Bungalow" className="navbar-logo" />
-            </Link>
+        <div className="title-section">
+          <Link href="/">
+            <img
+              src="/fullnamelogo.png"
+              alt="Bungalow"
+              className="navbar-logo"
+            />
+          </Link>
+        </div>
+        <div className="right-side-buttons">
+          <Link href="/categories" className="categories-link">
+            Categories
+          </Link>
+          <div className="info-button-desktop" onClick={handleClickInfoButton}>
+            <CircleQuestionMark size={24} />
           </div>
-          <div className="right-side-buttons">
-            <Link href="/categories" className="categories-link">
-              Categories
-            </Link>
-            <div className="info-button-desktop" onClick={handleClickInfoButton}>
-              <CircleQuestionMark size={24}/>
+          {profile ? (
+            <div className="navbar-user-section">
+              <Link
+                href={`/profile/${profile.username}`}
+                className="profile-link"
+              >
+                <div className="navbar-profile-circle">
+                  {profile.image ? (
+                    <img src={profile.image} alt="Profile" />
+                  ) : (
+                    <span className="navbar-profile-initials">
+                      {getUserInitials(profile.username || "U")}
+                    </span>
+                  )}
+                </div>
+                <span className="navbar-username">{profile.username}</span>
+              </Link>
+              <SignOutButton />
             </div>
-        {profile ? (
-          <div className="navbar-user-section">
-            <Link href={`/profile/${profile.username}`} className="profile-link">
-              <div className="navbar-profile-circle">
-                {profile.image ? (
-                  <img src={profile.image} alt="Profile" />
-                ) : (
-                  <span className="navbar-profile-initials">
-                    {getUserInitials(profile.username || 'U')}
-                  </span>
-                )}
-              </div>
-              <span className="navbar-username">
-                {profile.username}
-              </span>
-            </Link>
-            <SignOutButton />
-          </div>
-        ) : (
-          <SignInButton />
-        )}
+          ) : (
+            <SignInButton />
+          )}
         </div>
       </nav>
 
-      <InfoDialog
-        isOpen={showInfoDialog}
-        onClose={handleCloseInfoDialog}
-      />
+      <InfoDialog isOpen={showInfoDialog} onClose={handleCloseInfoDialog} />
     </div>
   );
 }

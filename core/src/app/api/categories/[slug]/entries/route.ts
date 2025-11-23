@@ -38,10 +38,11 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
 // Endpoint to post an entry
 export async function POST(req: NextRequest) {
   try {
+    const { prismaAdmin } = await import("../../../../../../lib/prisma-admin");
     const body = await req.json();
     const { categoryId, label, norm, url } = body
 
-    const entry = await prisma.entry.create({
+    const entry = await prismaAdmin.entry.create({
       data: {
         categoryId,
         label,

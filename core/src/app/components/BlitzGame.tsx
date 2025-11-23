@@ -2,7 +2,7 @@
 
 import "./quiz-game.css";
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import GuessInput from "./GuessInput";
 import QuizTable from "./QuizTable";
@@ -30,10 +30,9 @@ export default function BlitzGame({
   totalEntries,
   slug,
   isDynamic,
-  initialSession,
 }: QuizGameClientPropsType) {
-  const { data: session, status } = useSession();
-  const isLoggedIn = !!session;
+  const { user, loading } = useAuth();
+  const isLoggedIn = !!user;
   const router = useRouter();
   const safeDifficulties = (difficulties ?? []) as DifficultyType[];
   const safeEntries = entries ?? [];
@@ -65,7 +64,6 @@ export default function BlitzGame({
 
   const targetEntries = safeTotalEntries;
   const timeLimit = 60000;
-  const username = session?.user?.username;
 
   const isTargetEntriesGuessed = useMemo(() => {
     return correctGuesses.length === targetEntries;
@@ -146,9 +144,8 @@ export default function BlitzGame({
         })),
       };
 
-      if (username) {
+      if (user) {
         const gameData = {
-          username,
           slug: slug,
           difficultyId: selectedDifficulty?.id,
           time: time,
@@ -193,7 +190,7 @@ export default function BlitzGame({
         console.error("Error posting tally payload", error);
       }
     },
-    [username, slug, selectedDifficulty, targetEntries, correctGuesses]
+    [user, slug, selectedDifficulty, targetEntries, correctGuesses]
   );
 
   const handleTimeUp = useCallback(() => {
@@ -238,22 +235,22 @@ export default function BlitzGame({
     if (
       (isTargetEntriesGuessed &&
         finalTime !== null &&
-        !!username &&
+        !!user &&
         selectedDifficulty) ||
-      (givenUp && finalTime !== null && !!username)
+      (givenUp && finalTime !== null && !!user)
     ) {
       setShowFinishedIndicator(true);
     }
-  }, [isTargetEntriesGuessed, finalTime, givenUp, username, selectedDifficulty]);
+  }, [isTargetEntriesGuessed, finalTime, givenUp, user, selectedDifficulty]);
 
   useEffect(() => {
     if (
       (isTargetEntriesGuessed &&
         finalTime !== null &&
-        !!username &&
+        !!user &&
         selectedDifficulty) ||
-      (givenUp && finalTime !== null && !!username) ||
-      (isGameCompleted && finalTime !== null && !!username)
+      (givenUp && finalTime !== null && !!user) ||
+      (isGameCompleted && finalTime !== null && !!user)
     ) {
       if (!hasPostedRef.current) {
         hasPostedRef.current = true;
@@ -264,7 +261,7 @@ export default function BlitzGame({
     isTargetEntriesGuessed,
     finalTime,
     givenUp,
-    username,
+    user,
     selectedDifficulty,
     postGameData,
   ]);
@@ -336,7 +333,7 @@ export default function BlitzGame({
               </div>
             </div>
 
-            {status !== "loading" && !session && (
+            {!loading && !user && (
               <div className="not-logged-in-container">
                 <p className="not-logged-in-text">
                   You are not logged in. Your score will not be recorded.{" "}

@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { hash } from 'bcrypt'
-
-const prisma = new PrismaClient()
+import { prismaAdmin as prisma } from '../lib/prisma-admin'
 
 async function main() {
     const categories = [

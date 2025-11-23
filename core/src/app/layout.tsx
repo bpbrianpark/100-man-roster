@@ -4,8 +4,6 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import Provider from "./components/Provider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
 import Footer from "./components/Footer";
 import AdSlot from "./components/AdSlot";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -49,7 +47,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions)
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
   const bottomAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
   

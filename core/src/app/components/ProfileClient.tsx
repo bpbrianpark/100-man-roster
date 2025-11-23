@@ -2,7 +2,6 @@
 
 import "./profile-client.css";
 import { useMemo } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ProfileClientPropsType } from "./types";
 import AdSlot from "./AdSlot";
@@ -13,8 +12,6 @@ export default function ProfileClient({
   user,
   games,
 }: ProfileClientPropsType) {
-  const { data: session } = useSession();
-  const isLoggedIn = !!session;
   const router = useRouter();
 
   const sortedGames = useMemo(() => {

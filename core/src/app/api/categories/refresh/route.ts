@@ -1,4 +1,4 @@
-import { prisma } from "../../../../../lib/prisma";
+import { prismaAdmin as prisma } from "../../../../../lib/prisma-admin";
 import { normalize } from "path";
 import { queryWDQS } from "../../../../../lib/wdqs";
 import { NextRequest, NextResponse } from "next/server";

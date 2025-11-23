@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id
   email     String   @unique
   password  String
   username      String   @unique
@@ -89,7 +89,7 @@ model Alias {
 
 model Game {
   id      String  @id @default(cuid())
-  username  String
+  userId  String
   slug  String
   difficultyId  String
   time    Int
@@ -99,7 +99,7 @@ model Game {
   isDailyGame Boolean?
   entriesCounted Boolean @default(false)
 
-  user  User  @relation(fields:[username],references:[username], onDelete: Cascade)
+  user  User  @relation(fields:[userId],references:[id], onDelete: Cascade)
   category  Category  @relation(fields:[slug],references:[slug], onDelete:Cascade)
   difficulty Difficulty @relation(fields: [difficultyId], references: [id], onDelete: Cascade)
 

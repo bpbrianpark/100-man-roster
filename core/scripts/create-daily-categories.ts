@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prismaAdmin as prisma } from "../lib/prisma-admin";
 import {
   generateAllCategories,
   PropertyMap,

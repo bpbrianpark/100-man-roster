@@ -1,7 +1,5 @@
 import { prisma } from "../../../../lib/prisma";
 import { notFound } from "next/navigation";
-import { authOptions } from "../../../../lib/auth";
-import { getServerSession } from "next-auth";
 import BlitzGame from "@/app/components/BlitzGame";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +10,6 @@ export default async function BlitzPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const session = await getServerSession(authOptions);
 
   const category = await prisma.category.findUnique({
     where: { slug },
@@ -41,7 +38,6 @@ export default async function BlitzPage({
       totalEntries={category.entries?.length || 0}
       slug={slug}
       isDynamic={category.isDynamic}
-      initialSession={session}
     />
   );
 }

@@ -2,22 +2,16 @@
 
 import "./navbar.css";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import SignOutButton from "./SignOutButton";
-import { Session } from "next-auth";
 import SignInButton from "./SignInButton";
 import InfoDialog from "./InfoDialog";
 import { useCallback, useState } from "react";
 import { CircleQuestionMark } from "lucide-react";
+import { useUserProfile } from "../../lib/hooks/useUserProfile";
 
-interface ClientNavBarProps {
-  initialSession: Session | null;
-}
-
-export default function ClientNavBar({ initialSession }: ClientNavBarProps) {
-  const { data: session } = useSession();
+export default function ClientNavBar() {
+  const { profile } = useUserProfile();
   const [showInfoDialog, setShowInfoDialog] = useState(false);
-  const currentSession = session ?? initialSession;
 
   const getUserInitials = (username: string) => {
     return username
@@ -59,20 +53,20 @@ export default function ClientNavBar({ initialSession }: ClientNavBarProps) {
             <div className="info-button-desktop" onClick={handleClickInfoButton}>
               <CircleQuestionMark size={24}/>
             </div>
-        {currentSession?.user ? (
+        {profile ? (
           <div className="navbar-user-section">
-            <Link href={`/profile/${currentSession.user.username}`} className="profile-link">
+            <Link href={`/profile/${profile.username}`} className="profile-link">
               <div className="navbar-profile-circle">
-                {currentSession.user.image ? (
-                  <img src={currentSession.user.image} alt="Profile" />
+                {profile.image ? (
+                  <img src={profile.image} alt="Profile" />
                 ) : (
                   <span className="navbar-profile-initials">
-                    {getUserInitials(currentSession.user.username || currentSession.user.name || 'U')}
+                    {getUserInitials(profile.username || 'U')}
                   </span>
                 )}
               </div>
               <span className="navbar-username">
-                {currentSession.user.username || currentSession.user.name}
+                {profile.username}
               </span>
             </Link>
             <SignOutButton />

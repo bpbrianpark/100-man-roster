@@ -1,11 +1,15 @@
 'use client';
 
 import './button.css'
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SignOutButton() {
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/' });
+  const router = useRouter();
+  
+  const handleSignOut = async () => {
+    await fetch("/api/auth/signout", { method: "POST" });
+    router.push('/');
+    router.refresh(); // Refresh to update auth state
   };
 
   return (

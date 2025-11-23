@@ -1,14 +1,11 @@
 import QuizGame from "@/app/components/QuizGame";
 import { prisma } from "../../lib/prisma";
 import { notFound } from "next/navigation";
-import { authOptions } from "../../lib/auth";
-import { getServerSession } from "next-auth";
 import { getDailyCategory } from "../lib/daily-category";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
   
   let slug: string;
   try {
@@ -44,7 +41,6 @@ export default async function Home() {
       totalEntries={totalEntries}
       slug={slug}
       isDynamic={category.isDynamic}
-      initialSession={session || undefined}
     />
   );
 }

@@ -1,5 +1,5 @@
 
-import { prisma } from "../lib/prisma";
+import { prismaAdmin as prisma } from "../lib/prisma-admin";
 import { queryWDQS } from "../lib/wdqs";
 import { normalize } from "path";
 

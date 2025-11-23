@@ -1,11 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useUserProfile } from "../../lib/hooks/useUserProfile";
 import "./hero-section.css";
 
 export default function HeroSection() {
-  const { data: session } = useSession();
-  const isLoggedIn = !!session;
+  const { profile } = useUserProfile();
+  const isLoggedIn = !!profile;
 
   return (
     <div className="hero-section">
@@ -15,7 +15,7 @@ export default function HeroSection() {
           How many (x) can you name in (x) amount of time?
           
           {isLoggedIn 
-            ? ` Welcome back, ${session?.user?.username}!` 
+            ? ` Welcome back, ${profile?.username}!` 
             : " Sign up to track your scores and compete on leaderboards."}
         </p>
         <div className="hero-cta">

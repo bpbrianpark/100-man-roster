@@ -2,10 +2,6 @@
 
 import "./footer.css";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import SignOutButton from "./SignOutButton";
-import { Session } from "next-auth";
-import SignInButton from "./SignInButton";
 
 
 export default function Footer() {

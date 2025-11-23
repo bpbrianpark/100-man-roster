@@ -1,7 +1,5 @@
 import { prisma } from "../../../../lib/prisma";
 import { notFound } from "next/navigation";
-import { authOptions } from "../../../../lib/auth";
-import { getServerSession } from "next-auth";
 import ProfileClient from "@/app/components/ProfileClient";
 
 export const dynamic = "force-dynamic";
@@ -12,15 +10,19 @@ export default async function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
-  const session = await getServerSession(authOptions);
 
   const user = await prisma.user.findUnique({
     where: { username },
   });
 
+  if (!user) {
+    notFound();
+  }
+
+  // Use userId instead of username for game queries
   const dailyGames = await prisma.game.findMany({
     where: { 
-      username,
+      userId: user.id,
       isDailyGame: true
     },
     orderBy: { id: 'desc' },
@@ -29,7 +31,7 @@ export default async function ProfilePage({
 
   const normalGames = await prisma.game.findMany({
     where: { 
-      username,
+      userId: user.id,
       OR: [
         { isBlitzGame: null },
         { isBlitzGame: false }
@@ -42,7 +44,7 @@ export default async function ProfilePage({
 
   const blitzGames = await prisma.game.findMany({
     where: { 
-      username,
+      userId: user.id,
       isBlitzGame: true
     },
     orderBy: { id: 'desc' },

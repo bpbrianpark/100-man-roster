@@ -2,7 +2,7 @@
 
 import "./quiz-game.css";
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import GuessInput from "./GuessInput";
 import QuizTable from "./QuizTable";
@@ -52,10 +52,9 @@ export default function QuizGame({
   totalEntries,
   slug,
   isDynamic,
-  initialSession,
 }: QuizGameClientPropsType) {
-  const { data: session, status } = useSession();
-  const isLoggedIn = !!session;
+  const { user, loading } = useAuth();
+  const isLoggedIn = !!user;
   const router = useRouter();
   const safeDifficulties = (difficulties ?? []) as DifficultyType[];
   const safeEntries = entries ?? [];
@@ -85,7 +84,6 @@ export default function QuizGame({
   const hasPostedRef = useRef(false);
 
   const targetEntries = selectedDifficulty?.limit || safeTotalEntries;
-  const username = session?.user?.username;
 
   const isTargetEntriesGuessed = useMemo(() => {
     return correctGuesses.length === targetEntries;
@@ -185,9 +183,8 @@ export default function QuizGame({
         })),
       };
 
-      if (username) {
+      if (user) {
         const gameData = {
-          username,
           slug: slug,
           difficultyId: selectedDifficulty?.id,
           time: time,
@@ -238,7 +235,7 @@ export default function QuizGame({
         console.error("[QuizGame] Error posting tally payload", error);
       }
     },
-    [username, slug, selectedDifficulty, targetEntries, correctGuesses]
+    [user, slug, selectedDifficulty, targetEntries, correctGuesses]
   );
 
   const handleStopwatchUpdate = useCallback(
@@ -365,7 +362,7 @@ export default function QuizGame({
               </div>
             </div>
 
-            {status !== "loading" && !session && (
+            {!loading && !user && (
               <div className="not-logged-in-container">
                 <p className="not-logged-in-text">
                   You are not logged in. Your score will not be recorded.{" "}

@@ -3,7 +3,7 @@ import {
   EntryPayload,
   dedupeEntryPayloads,
 } from "../../../../lib/entry-utils";
-import { prisma } from "../../../../../lib/prisma";
+import { prismaAdmin as prisma } from "../../../../../lib/prisma-admin";
 import { normalize } from "../../../../../lib/normalize";
 
 type TallyRequestBody = {

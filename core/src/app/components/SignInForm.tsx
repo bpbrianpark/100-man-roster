@@ -3,7 +3,6 @@
 import './sign-up-form.css'
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -37,17 +36,21 @@ export default function SignInForm() {
         setLoading(true);
 
         try {
-            const signInResult = await signIn("credentials", { 
-                email: email.trim(), 
-                password, 
-                redirect: false 
+            const response = await fetch("/api/auth/signin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    email: email.trim(), 
+                    password 
+                }),
             });
-            console.log(signInResult)
 
-            if (signInResult?.ok) {
+            if (response.ok) {
                 router.push(callbackUrl);
+                router.refresh(); // Refresh to update auth state
             } else {
-                setError(signInResult?.error || 'Invalid email or password');
+                const data = await response.json();
+                setError(data.error || 'Invalid email or password');
                 triggerErrorEffect();
             }
 

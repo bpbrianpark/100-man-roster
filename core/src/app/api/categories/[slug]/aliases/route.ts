@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../../lib/prisma";
+import { prismaAdmin } from "../../../../../../lib/prisma-admin";
 
 export async function POST(
   req: Request
@@ -12,7 +12,7 @@ export async function POST(
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const alias = await prisma.alias.create({
+    const alias = await prismaAdmin.alias.create({
       data: {
         categoryId,
         entryId,

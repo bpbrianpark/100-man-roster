@@ -1,5 +1,4 @@
 import { Alias, Category, Difficulty, Entry, Game, User } from '@prisma/client';
-import { Session } from 'next-auth';
 
 export interface UserType {
   id: number;
@@ -95,7 +94,6 @@ export interface QuizGameClientPropsType {
     totalEntries?: number; 
     slug: string;
     isDynamic?: boolean;
-    initialSession?: Session;
 }
 
 export interface QuizTablePropsType {

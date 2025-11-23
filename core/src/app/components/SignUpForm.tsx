@@ -3,7 +3,6 @@
 import "./sign-up-form.css";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -64,26 +63,46 @@ export default function SignUpForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Registration failed");
+        setError(data.error || data.message || "Registration failed");
         triggerErrorEffect();
         setLoading(false);
         return;
       }
       console.log("User created:", data.user);
 
-      const signInResult = await signIn("credentials", {
-        email: email.trim(),
-        password,
-        callbackUrl,
-        redirect: false,
+      // Check if email confirmation is required
+      if (data.requiresConfirmation) {
+        setError(data.message || "Please check your email to confirm your account before signing in.");
+        triggerErrorEffect();
+        setLoading(false);
+        return;
+      }
+
+      // If session was returned, user is already signed in
+      if (data.session) {
+        router.push(callbackUrl);
+        router.refresh(); // Refresh to update auth state
+        return;
+      }
+
+      // Otherwise, try to sign in
+      const signInResponse = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
-      if (signInResult?.ok) {
+      if (signInResponse.ok) {
         router.push(callbackUrl);
+        router.refresh(); // Refresh to update auth state
       } else {
-      setError(
-          "Registration successful, but auto sign-in failed. Please sign in manually."
-        );
+        const signInData = await signInResponse.json();
+        // Check if it's an email confirmation issue
+        if (signInData.error?.includes('email') || signInData.error?.includes('confirm')) {
+          setError("Please check your email to confirm your account before signing in.");
+        } else {
+          setError("Registration successful, but auto sign-in failed. Please sign in manually.");
+        }
         triggerErrorEffect();
       }
     } catch (err) {

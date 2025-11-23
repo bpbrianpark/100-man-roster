@@ -1,11 +1,12 @@
 import { prisma } from "../../lib/prisma";
+import { prismaAdmin } from "../../lib/prisma-admin";
 
 /*  Gets the daily category for today using a date-based seed. Returns the slug of the daily category. */
 export async function getDailyCategory(): Promise<string> {
   const now = new Date();
   const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
-  // Check if already selected today
+  // Check if already selected today (read operation - use regular prisma)
   const todayCategory = await prisma.category.findFirst({
     where: {
       isDaily: true,
@@ -34,7 +35,7 @@ export async function selectDailyCategory(): Promise<string> {
   const todayISO = todayUTC.toISOString().split('T')[0];
   const seed = todayISO;
 
-  // Check if already selected today
+  // Check if already selected today (read operation - use regular prisma)
   const todayCategory = await prisma.category.findFirst({
     where: {
       isDaily: true,
@@ -50,7 +51,7 @@ export async function selectDailyCategory(): Promise<string> {
     return todayCategory.slug;
   }
 
-  // Find available categories
+  // Find available categories (read operation - use regular prisma)
   const availableCategories = await prisma.category.findMany({
     where: {
       isDaily: true,
@@ -66,8 +67,8 @@ export async function selectDailyCategory(): Promise<string> {
   });
 
   if (availableCategories.length === 0) {
-    // Reset all daily categories
-    await prisma.category.updateMany({
+    // Reset all daily categories (write operation - use admin)
+    await prismaAdmin.category.updateMany({
       where: { isDaily: true },
       data: { hasBeenSelected: false },
     });
@@ -85,7 +86,7 @@ export async function selectDailyCategory(): Promise<string> {
     const selectedIndex = hashString(seed) % allDailyCategories.length;
     const selectedCategory = allDailyCategories[selectedIndex];
 
-    await prisma.category.update({
+    await prismaAdmin.category.update({
       where: { id: selectedCategory.id },
       data: {
         hasBeenSelected: true,
@@ -99,7 +100,7 @@ export async function selectDailyCategory(): Promise<string> {
   const selectedIndex = hashString(seed) % availableCategories.length;
   const selectedCategory = availableCategories[selectedIndex];
 
-  await prisma.category.update({
+  await prismaAdmin.category.update({
     where: { id: selectedCategory.id },
     data: {
       hasBeenSelected: true,

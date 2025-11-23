@@ -1,4 +1,5 @@
 import { prisma } from "../../../../lib/prisma";
+import { createClient } from "../../../../lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // Endpoint to retrieve all the games (for the leaderboard)
@@ -14,11 +15,20 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // RLS will automatically filter games to only show authenticated users' games
+  // For leaderboard, we want to show all games (not just current user's)
+  // So we use a service role connection or query without RLS filtering
   const games = await prisma.game.findMany({
     where: {
       slug,
       difficultyId,
-      username: { not: "GUEST" },
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
     },
     orderBy: [
       { correct_count: 'desc' },
@@ -31,33 +41,57 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Games not found" }, { status: 404 });
   }
 
-  return NextResponse.json(games);
+  // Map games to include username for backward compatibility
+  const gamesWithUsername = games.map(game => ({
+    id: game.id,
+    userId: game.userId,
+    username: game.user.username,
+    slug: game.slug,
+    difficultyId: game.difficultyId,
+    time: game.time,
+    targetCount: game.targetCount,
+    correct_count: game.correct_count,
+    isBlitzGame: game.isBlitzGame,
+    isDailyGame: game.isDailyGame,
+    entriesCounted: game.entriesCounted,
+  }));
+
+  return NextResponse.json(gamesWithUsername);
 }
 
 // Endpoint to put the game inside the database after completion
 export async function POST(req: NextRequest) {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      console.warn("[/api/games] Guest submission ignored for game persistence");
+      return NextResponse.json(
+        { ok: true, guest: true },
+        { status: 200 }
+      );
+    }
+
     const body = await req.json();
     const {
       slug,
       difficultyId,
       time,
       targetCount,
-      username,
       correct_count,
     }: {
       slug?: string;
       difficultyId?: string;
       time?: number;
       targetCount?: number | null;
-      username?: string;
       correct_count?: number;
     } = body;
 
     console.log("[/api/games] Received submission", {
       slug,
       difficultyId,
-      username,
+      userId: user.id,
       correct_count,
       time,
       targetCount,
@@ -76,24 +110,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!username) {
-      console.warn("[/api/games] Guest submission ignored for game persistence", {
-        slug,
-        difficultyId,
-      });
-      return NextResponse.json(
-        { ok: true, guest: true },
-        { status: 200 }
-      );
-    }
-
+    // RLS will enforce that userId matches authenticated user
     const game = await prisma.game.create({
       data: {
         slug,
         difficultyId,
         time,
         targetCount,
-        username,
+        userId: user.id, // Use user.id from Supabase Auth
         correct_count,
       },
     });

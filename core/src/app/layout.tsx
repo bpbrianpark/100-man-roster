@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   title: "Recall Race",
   description:
     "Recall Race is a fast-paced trivia experience—pick a category, race the clock, and climb the leaderboards.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
   openGraph: {
     title: "Recall Race",
     description:
@@ -40,6 +39,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.svg",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default async function RootLayout({

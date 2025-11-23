@@ -1,0 +1,99 @@
+.category-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background-color: var(--color-secondary);
+}
+
+.category-list-item-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+
+.category-list-item-buttons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.category-list-button-link {
+  text-decoration: none;
+}
+
+.category-list-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.category-list-button:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.category-list-button-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .category-list-item {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .category-list-item-name {
+    font-size: 0.9375rem;
+  }
+
+  .category-list-item-buttons {
+    gap: 6px;
+  }
+
+  .category-list-button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .category-list-button-text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-list-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .category-list-item-buttons {
+    width: 100%;
+  }
+
+  .category-list-button-link {
+    flex: 1;
+  }
+
+  .category-list-button {
+    width: 100%;
+  }
+}

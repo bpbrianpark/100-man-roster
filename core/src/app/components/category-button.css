@@ -72,12 +72,14 @@
   justify-content: center;
   gap: 12px;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
 .mode-button-link {
   text-decoration: none;
   flex: 1;
   min-width: 0;
+  flex-basis: calc(50% - 6px);
 }
 
 .mode-button {
@@ -93,6 +95,9 @@
   font-family: var(--font-main);
   font-size: 0.875rem;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mode-button:hover {
@@ -121,11 +126,32 @@
     padding: 16px;
   }
 
+  .category-mode-options {
+    gap: 8px;
+  }
+
+  .mode-button-link {
+    flex-basis: calc(50% - 4px);
+  }
+
   .mode-button {
-    padding: 10px 12px;
+    padding: 10px 8px;
+    font-size: 0.75rem;
   }
 
   .mode-text {
-    font-size: 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-button {
+    padding: 8px 6px;
+    font-size: 0.7rem;
+  }
+
+  .mode-text {
+    font-size: 10px;
+    letter-spacing: 0.3px;
   }
 }

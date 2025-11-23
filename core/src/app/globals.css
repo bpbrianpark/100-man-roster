@@ -234,6 +234,15 @@ main {
   padding-top: 0;
 }
 
+.tag-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 @media (min-width: 1200px) {
   .category-link-grid {
     grid-template-columns: repeat(3, 1fr);

@@ -22,6 +22,13 @@ export interface CategoryType {
   isDaily?: boolean | null;
   hasBeenSelected?: boolean | null;
   playedOn?: Date | null;
+  tags?: string[];
+}
+
+export interface TagCardProps {
+  tagName: string;
+  categories: CategoryType[];
+  imageUrl?: string | null;
 }
 
 export interface DifficultyType {

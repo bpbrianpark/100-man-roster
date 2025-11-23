@@ -19,20 +19,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Recall Race",
+  title: "100 Man Roster",
   description:
-    "Recall Race is a fast-paced trivia experience—pick a category, race the clock, and climb the leaderboards.",
+    "100 Man Roster is a fast-paced trivia experience—pick a category, race the clock, and climb the leaderboards.",
   openGraph: {
-    title: "Recall Race",
+    title: "100 Man Roster",
     description:
       "Challenge yourself to name as many items as possible before the timer hits zero.",
     url: "https://recallrace.com",
-    siteName: "Recall Race",
+    siteName: "100 Man Roster",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Recall Race",
+    title: "100 Man Roster",
     description:
       "Race the clock and test your knowledge across dozens of categories.",
   },

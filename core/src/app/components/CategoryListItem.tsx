@@ -18,12 +18,18 @@ export default function CategoryListItem({
     <div className="category-list-item">
       <span className="category-list-item-name">{name}</span>
       <div className="category-list-item-buttons">
-        <Link href={`${baseUrl}/quiz/${slug}`} className="category-list-button-link">
+        <Link
+          href={`${baseUrl}/quiz/${slug}`}
+          className="category-list-button-link"
+        >
           <button className="category-list-button normal">
             <span className="category-list-button-text">Normal</span>
           </button>
         </Link>
-        <Link href={`${baseUrl}/blitz/${slug}`} className="category-list-button-link">
+        <Link
+          href={`${baseUrl}/blitz/${slug}`}
+          className="category-list-button-link"
+        >
           <button className="category-list-button blitz">
             <span className="category-list-button-text">Blitz</span>
           </button>
@@ -32,4 +38,3 @@ export default function CategoryListItem({
     </div>
   );
 }
-

@@ -7,16 +7,16 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import "./tag-card.css";
 
 const TAG_DISPLAY_NAMES: Record<string, string> = {
-  "people": "People",
-  "Pokemon": "Pokemon",
-  "sports": "Sports",
-  "biology": "Biology",
-  "tv": "TV",
-  "anime": "Anime",
-  "movies": "Movies",
+  people: "People",
+  Pokemon: "Pokemon",
+  sports: "Sports",
+  biology: "Biology",
+  tv: "TV",
+  anime: "Anime",
+  movies: "Movies",
   "video games": "Video Games",
-  "world": "World",
-  "Other": "Other",
+  world: "World",
+  Other: "Other",
 };
 
 export default function TagCard({
@@ -26,7 +26,8 @@ export default function TagCard({
 }: TagCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const displayName = TAG_DISPLAY_NAMES[tagName] || 
+  const displayName =
+    TAG_DISPLAY_NAMES[tagName] ||
     tagName.charAt(0).toUpperCase() + tagName.slice(1);
   const headerImage = imageUrl || null;
 
@@ -54,11 +55,7 @@ export default function TagCard({
         </div>
         <h2 className="tag-card-header-title">{displayName}</h2>
         <div className="tag-card-header-chevron">
-          {isExpanded ? (
-            <ChevronUp size={20} />
-          ) : (
-            <ChevronDown size={20} />
-          )}
+          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </div>
       </button>
       {isExpanded && (
@@ -77,4 +74,3 @@ export default function TagCard({
     </div>
   );
 }
-

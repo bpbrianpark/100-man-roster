@@ -135,6 +135,35 @@
   color: white;
 }
 
+.daily-challenge-header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.875rem 2rem;
+  border: 2px solid var(--color-accent);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--success-color) 100%);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+}
+
+.daily-challenge-header-button:hover {
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+  border-color: var(--success-color-light);
+  background: linear-gradient(135deg, var(--success-color-light) 0%, var(--success-color) 100%);
+}
+
+.daily-challenge-header-button:active {
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
 .header-button-icon {
   width: 16px;
   height: 16px;
@@ -162,6 +191,12 @@
     padding: 0.625rem 0.875rem;
     font-size: 0.8125rem;
     min-height: 44px;
+  }
+
+  .daily-challenge-header-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    min-height: 48px;
   }
 
   .header-button-icon {

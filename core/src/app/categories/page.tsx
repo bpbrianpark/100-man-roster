@@ -13,6 +13,15 @@ export default async function CategoriesPage() {
       slug: true,
       name: true,
       imageUrl: true,
+      tags: true,
+      sparql: true,
+      isDynamic: true,
+      createdAt: true,
+      updatedAt: true,
+      isDaily: true,
+      hasBeenSelected: true,
+      playedOn: true,
+      updateSparql: true,
     },
   });
 

@@ -1,7 +1,7 @@
 :root {
   --color-primary: #f9f7f7;
   --color-secondary: #dbe2ef;
-  --color-accent: #73af6f;
+  --color-accent: #73AF6F;
   --color-text: #112d4e;
   --font-main:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
@@ -232,6 +232,15 @@ main {
   gap: 24px;
   width: 100%;
   padding-top: 0;
+}
+
+.tag-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 @media (min-width: 1200px) {

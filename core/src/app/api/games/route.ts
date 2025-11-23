@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
   });
 
   if (!games || games.length === 0) {
-    return NextResponse.json({ error: "Games not found" }, { status: 404 });
+    return NextResponse.json([]);
   }
 
   // Map games to include username for backward compatibility

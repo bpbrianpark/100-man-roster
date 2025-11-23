@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     console.warn("[/api/leaderboard/top-entries] Missing slug");
     return NextResponse.json(
       { error: "Missing slug parameter" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -45,8 +45,7 @@ export async function GET(req: NextRequest) {
         error: "Failed to fetch top entries",
         message: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

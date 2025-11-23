@@ -6,16 +6,17 @@ interface GuessInputProps {
   disabled?: boolean;
 }
 
-export default function GiveUpButton({ onGiveUp, disabled = false }: GuessInputProps) {
-
+export default function GiveUpButton({
+  onGiveUp,
+  disabled = false,
+}: GuessInputProps) {
   const handleSubmit = () => {
     if (disabled) return;
     onGiveUp();
-  }
-
+  };
 
   return (
-    <button 
+    <button
       onClick={handleSubmit}
       disabled={disabled}
       className="control-button control-button-destructive"

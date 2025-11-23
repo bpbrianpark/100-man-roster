@@ -1,4 +1,4 @@
-import { prisma } from "../../../../../lib/prisma";
+import { prismaAdmin as prisma } from "../../../../../lib/prisma-admin";
 import { normalize } from "path";
 import { queryWDQS } from "../../../../../lib/wdqs";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,15 +15,18 @@ export async function POST(req: NextRequest) {
   const data = await queryWDQS(sparql);
 
   const rows = data.results.bindings;
-  const entriesByItem: Record<string, { label: string; url: string; aliases: string[] }> = {};
+  const entriesByItem: Record<
+    string,
+    { label: string; url: string; aliases: string[] }
+  > = {};
 
   for (const r of rows) {
-    const item = r.item.value; 
+    const item = r.item.value;
     if (!entriesByItem[item]) {
       entriesByItem[item] = {
         label: r.item_label.value,
         url: r.item.value,
-        aliases: []
+        aliases: [],
       };
     }
     if (r.alias) {
@@ -42,16 +45,16 @@ export async function POST(req: NextRequest) {
         label: e.label,
         norm: normalize(e.label),
         url: e.url,
-      }
+      },
     });
 
     if (e.aliases.length) {
       await prisma.alias.createMany({
-        data: e.aliases.map(a => ({
+        data: e.aliases.map((a) => ({
           entryId: entry.id,
           label: a,
           norm: normalize(a),
-        }))
+        })),
       });
     }
   }

@@ -2,16 +2,16 @@
 
 import "./button.css";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useUserProfile } from "../../lib/hooks/useUserProfile";
 import { User, LogIn } from "lucide-react";
 
 export default function AuthButton() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { profile } = useUserProfile();
 
   const handleClick = () => {
-    if (session?.user?.username) {
-      router.push(`/profile/${session.user.username}`);
+    if (profile?.username) {
+      router.push(`/profile/${profile.username}`);
     } else {
       router.push("/sign-in");
     }
@@ -19,7 +19,7 @@ export default function AuthButton() {
 
   return (
     <button onClick={handleClick} className="header-button">
-      {session?.user?.username ? (
+      {profile?.username ? (
         <>
           <User className="header-button-icon" />
           Profile
@@ -33,4 +33,3 @@ export default function AuthButton() {
     </button>
   );
 }
-

@@ -1,6 +1,10 @@
 .hero-section {
   width: 100%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
   border-bottom: 2px solid var(--color-secondary);
   padding: 80px 0;
   display: flex;
@@ -122,4 +126,3 @@
     font-size: 15px;
   }
 }
-

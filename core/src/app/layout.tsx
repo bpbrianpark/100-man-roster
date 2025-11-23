@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Provider from "./components/Provider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
 import Footer from "./components/Footer";
 import AdSlot from "./components/AdSlot";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -24,7 +22,6 @@ export const metadata: Metadata = {
   title: "Recall Race",
   description:
     "Recall Race is a fast-paced trivia experience—pick a category, race the clock, and climb the leaderboards.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
   openGraph: {
     title: "Recall Race",
     description:
@@ -41,7 +38,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/logo.svg",
-  }
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default async function RootLayout({
@@ -49,10 +52,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions)
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
   const bottomAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
-  
+
   return (
     <html lang="en">
       <body>
@@ -66,13 +68,13 @@ export default async function RootLayout({
           />
         ) : null}
         <Provider>
-        {children}
-        {bottomAdSlot ? (
-          <AdSlot slot={bottomAdSlot} className="bottom-banner-ad" />
-        ) : null}
-        <Footer />
-        <SpeedInsights />
-        <Analytics />
+          {children}
+          {bottomAdSlot ? (
+            <AdSlot slot={bottomAdSlot} className="bottom-banner-ad" />
+          ) : null}
+          <Footer />
+          <SpeedInsights />
+          <Analytics />
         </Provider>
       </body>
     </html>

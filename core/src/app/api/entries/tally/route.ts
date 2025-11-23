@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  EntryPayload,
-  dedupeEntryPayloads,
-} from "../../../../lib/entry-utils";
-import { prisma } from "../../../../../lib/prisma";
+import { EntryPayload, dedupeEntryPayloads } from "../../../../lib/entry-utils";
+import { prismaAdmin as prisma } from "../../../../../lib/prisma-admin";
 import { normalize } from "../../../../../lib/normalize";
 
 type TallyRequestBody = {
@@ -28,7 +25,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(
         { error: "Missing required payload" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -50,10 +47,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (!category) {
-        console.error(
-          "[/api/entries/tally] Category not found for slug",
-          slug
-        );
+        console.error("[/api/entries/tally] Category not found for slug", slug);
         throw new Error("Category not found");
       }
 
@@ -62,14 +56,10 @@ export async function POST(req: NextRequest) {
       for (const entry of deduped) {
         const url = entry.url;
         const label = entry.label;
-        const normValue =
-          entry.norm ?? (label ? normalize(label) : undefined);
+        const normValue = entry.norm ?? (label ? normalize(label) : undefined);
 
         if (!url || !label || !normValue) {
-          console.warn(
-            "[/api/entries/tally] Skipping incomplete entry",
-            entry
-          );
+          console.warn("[/api/entries/tally] Skipping incomplete entry", entry);
           continue;
         }
 
@@ -105,8 +95,7 @@ export async function POST(req: NextRequest) {
         error: "Failed to increment entries",
         message: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

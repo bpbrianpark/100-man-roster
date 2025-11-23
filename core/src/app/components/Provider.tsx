@@ -1,16 +1,14 @@
-'use client';
+"use client";
 
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react'
-import { FC, ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface ProviderProps {
-    children: ReactNode;
-    session?: Session | null;
+  children: ReactNode;
 }
 
-const Provider: FC<ProviderProps> = ({ children, session }) => {
-    return <SessionProvider session={session}>{children}</SessionProvider>
-}
+// Supabase handles auth state via cookies, no provider needed
+const Provider = ({ children }: ProviderProps) => {
+  return <>{children}</>;
+};
 
 export default Provider;

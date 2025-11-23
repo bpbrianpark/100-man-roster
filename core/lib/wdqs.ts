@@ -4,9 +4,9 @@ export async function queryWDQS(sparql: string) {
     headers: {
       "Content-Type": "application/sparql-query; charset=UTF-8",
       "User-Agent": "WikiQuiz/0.1 (contact@example.com)",
-      "Accept": "application/sparql-results+json"
+      Accept: "application/sparql-results+json",
     },
-    body: sparql
+    body: sparql,
   });
   if (!res.ok) throw new Error(`WDQS error ${res.status}`);
   return res.json();

@@ -1,12 +1,12 @@
 .stopwatch-time {
-    width: 100%; 
-    font-size: 120px; 
-    text-align: center; 
-    color: var(--color-text);
-    font-family: 'Courier New', monospace;
-    justify-self: center;
-    font-weight: 700;
-    line-height: 1.2;
+  width: 100%;
+  font-size: 120px;
+  text-align: center;
+  color: var(--color-text);
+  font-family: "Courier New", monospace;
+  justify-self: center;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 @media (max-width: 768px) {

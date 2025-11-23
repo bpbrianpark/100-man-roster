@@ -10,14 +10,14 @@ export default async function LeaderboardPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  
+
   const category = await prisma.category.findUnique({
     where: { slug },
     include: {
       difficulties: {
-        orderBy: { level: 'asc' }
-      }
-    }
+        orderBy: { level: "asc" },
+      },
+    },
   });
 
   if (!category) {
@@ -29,19 +29,38 @@ export default async function LeaderboardPage({
       slug: slug,
       difficultyId: category.difficulties[0]?.id,
     },
-    orderBy: [
-      { correct_count: 'desc' },
-      { time: 'asc' }
-    ],
-    take: 25
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+    orderBy: [{ correct_count: "desc" }, { time: "asc" }],
+    take: 25,
   });
+
+  // Map games to include username for backward compatibility
+  const gamesWithUsername = initialGames.map((game) => ({
+    id: game.id,
+    userId: game.userId,
+    username: game.user.username,
+    slug: game.slug,
+    difficultyId: game.difficultyId,
+    time: game.time,
+    targetCount: game.targetCount,
+    correct_count: game.correct_count,
+    isBlitzGame: game.isBlitzGame,
+    isDailyGame: game.isDailyGame,
+    entriesCounted: game.entriesCounted,
+  }));
 
   return (
     <div className="p-6">
       <Leaderboard
         category={category}
         difficulties={category.difficulties}
-        initialGames={initialGames}
+        initialGames={gamesWithUsername}
         slug={slug}
       />
     </div>

@@ -58,7 +58,7 @@ export function generateSlug(name: string): string {
 export function generateCategoryName(
   combination: string[],
   values: string[],
-  nameMap: NameMap
+  nameMap: NameMap,
 ): string {
   if (combination.length !== values.length) {
     throw new Error("Combination and values arrays must have the same length");
@@ -81,7 +81,7 @@ export function generateCategoryName(
 export function generateSparql(
   combination: string[],
   values: string[],
-  propertyMap: PropertyMap
+  propertyMap: PropertyMap,
 ): string {
   if (combination.length !== values.length) {
     throw new Error("Combination and values arrays must have the same length");
@@ -130,7 +130,7 @@ export function generateAllCategories(
   propertyMap: PropertyMap,
   valueMaps: ValueMaps,
   nameMap: NameMap,
-  combinations: string[][]
+  combinations: string[][],
 ): GeneratedCategory[] {
   const categories: GeneratedCategory[] = [];
 
@@ -147,7 +147,7 @@ export function generateAllCategories(
 
     // Generate all combinations of values
     const valueArrays: string[][] = combination.map((prop) =>
-      Object.keys(valueMaps[prop])
+      Object.keys(valueMaps[prop]),
     );
 
     // Generate cartesian product of all value arrays

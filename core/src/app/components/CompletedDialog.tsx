@@ -5,15 +5,15 @@ import { Copy, Check, X } from "lucide-react";
 import { CompletedDialogPropsType } from "./types";
 
 export default function CompletedDialog({
-    isOpen,
-    onClose,
-    finalTime,
-    correctGuesses,
-    targetEntries,
-    categoryName,
-    difficultyName,
-    isLoggedIn,
-    gameType
+  isOpen,
+  onClose,
+  finalTime,
+  correctGuesses,
+  targetEntries,
+  categoryName,
+  difficultyName,
+  isLoggedIn,
+  gameType,
 }: CompletedDialogPropsType) {
   const [copied, setCopied] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -47,17 +47,17 @@ Game Mode: ${gameType}
 
 Think you can beat my score? Try it yourself at https://quiz-game-lime.vercel.app`;
 
-const blitzScoreText = `I can name ${correctGuesses} of ${categoryName} in ${timeStr}!
+    const blitzScoreText = `I can name ${correctGuesses} of ${categoryName} in ${timeStr}!
 
 Game Mode: ${gameType}
 
 Think you can beat my score? Try it yourself at https://quiz-game-lime.vercel.app`;
 
-if (gameType === "Normal") {
-  return normalScoreText
-} else {
-  return blitzScoreText
-}
+    if (gameType === "Normal") {
+      return normalScoreText;
+    } else {
+      return blitzScoreText;
+    }
   };
 
   const copyToClipboard = async () => {
@@ -98,7 +98,7 @@ if (gameType === "Normal") {
             animationDelay: `${delay}s`,
             animationDuration: `${duration}s`,
           }}
-        />
+        />,
       );
     }
     return confettiPieces;
@@ -123,9 +123,9 @@ if (gameType === "Normal") {
             <div className="score-item">
               <span className="score-label">Score:</span>
               <span className="score-value">
-                {(gameType === "Normal") ? 
-                  `${correctGuesses}/${targetEntries}` :
-                  correctGuesses}
+                {gameType === "Normal"
+                  ? `${correctGuesses}/${targetEntries}`
+                  : correctGuesses}
               </span>
             </div>
             <div className="score-item">
@@ -157,4 +157,4 @@ if (gameType === "Normal") {
       </div>
     </>
   );
-};
+}

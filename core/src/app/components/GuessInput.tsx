@@ -23,7 +23,7 @@ async function handleBinding(
   category: CategoryType,
   aliasHashMap: Map<string, AliasType>,
   entryByNorm: Map<string, EntryType>,
-  entryByUrl: Map<string, EntryType>
+  entryByUrl: Map<string, EntryType>,
 ): Promise<EntryType | null> {
   const label = binding.itemLabel?.value ?? binding.item_label?.value;
   const url = binding.item?.value;
@@ -110,7 +110,7 @@ async function checkAndInsertDynamic(
   entryByNorm: Map<string, EntryType>,
   entryByUrl: Map<string, EntryType>,
   guess: string,
-  category: CategoryType
+  category: CategoryType,
 ): Promise<EntryType | null> {
   if (!category.updateSparql) return null;
 
@@ -131,8 +131,8 @@ async function checkAndInsertDynamic(
       category,
       aliasHashMap,
       entryByNorm,
-      entryByUrl
-    )
+      entryByUrl,
+    ),
   );
 
   const results = await Promise.allSettled(bindingPromises);
@@ -149,7 +149,7 @@ async function checkAndInsertDynamic(
 function fuzzySearch<T extends { norm: string }>(
   fuse: Fuse<T>,
   guess: string,
-  normalizedGuess: string
+  normalizedGuess: string,
 ): T | null {
   if (normalizedGuess.length === 0) return null;
 
@@ -177,7 +177,7 @@ async function checkGuess(
   entriesFuse: Fuse<EntryType>,
   aliasesFuse: Fuse<AliasType>,
   entryById: Map<string, EntryType>,
-  isDynamic: boolean
+  isDynamic: boolean,
 ): Promise<EntryType | null> {
   const transformedGuess = transformGuess(category.slug, guess);
   const normalizedGuess = normalize(transformedGuess);
@@ -189,7 +189,11 @@ async function checkGuess(
     return correspondingEntry;
   }
 
-  const fuzzyMatch = fuzzySearch(entriesFuse, transformedGuess, normalizedGuess);
+  const fuzzyMatch = fuzzySearch(
+    entriesFuse,
+    transformedGuess,
+    normalizedGuess,
+  );
   if (fuzzyMatch) {
     return fuzzyMatch;
   }
@@ -202,7 +206,11 @@ async function checkGuess(
     }
   }
 
-  const aliasFuzzyMatch = fuzzySearch(aliasesFuse, transformedGuess, normalizedGuess);
+  const aliasFuzzyMatch = fuzzySearch(
+    aliasesFuse,
+    transformedGuess,
+    normalizedGuess,
+  );
   if (aliasFuzzyMatch) {
     const entry = entryById.get(aliasFuzzyMatch.entryId) || null;
     if (entry) {
@@ -216,7 +224,7 @@ async function checkGuess(
       entryByNorm,
       entryByUrl,
       transformedGuess,
-      category
+      category,
     );
     if (!verifiedEntry) {
       return null;
@@ -296,7 +304,7 @@ export default function GuessInput({
         entriesFuse,
         aliasesFuse,
         entryById,
-        true
+        true,
       );
 
       if (correctEntry) {
@@ -323,7 +331,7 @@ export default function GuessInput({
       entriesFuse,
       aliasesFuse,
       entryById,
-    ]
+    ],
   );
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -352,7 +360,9 @@ export default function GuessInput({
         />
         <button
           onClick={handleSubmit}
-          disabled={isGameCompleted || disabled || !inputValue.trim() || loading}
+          disabled={
+            isGameCompleted || disabled || !inputValue.trim() || loading
+          }
           className="guess-submit-button"
         >
           Submit

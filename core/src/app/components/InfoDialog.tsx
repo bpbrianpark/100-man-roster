@@ -5,11 +5,10 @@ import { Copy, Check, X, Lightbulb, Clock, Target, Trophy } from "lucide-react";
 import { InfoDialogPropsType } from "./types";
 
 export default function InfoDialog({
-    isOpen,
-    onClose,
-    gameType
+  isOpen,
+  onClose,
+  gameType,
 }: InfoDialogPropsType) {
-
   if (!isOpen) return null;
 
   return (
@@ -22,7 +21,9 @@ export default function InfoDialog({
 
           <div className="info-dialog-header">
             <h2 className="info-dialog-title">How to Play</h2>
-            <p className="info-dialog-subtitle">Test your knowledge and speed!</p>
+            <p className="info-dialog-subtitle">
+              Test your knowledge and speed!
+            </p>
           </div>
 
           <div className="info-dialog-content">
@@ -33,7 +34,9 @@ export default function InfoDialog({
               <div className="info-step-content">
                 <h3 className="info-step-title">Type Your Guesses</h3>
                 <p className="info-step-description">
-                  Enter names of people, places, or things that match the category and have a Wikipedia page. Correct guesses appear in green!
+                  Enter names of people, places, or things that match the
+                  category and have a Wikipedia page. Correct guesses appear in
+                  green!
                 </p>
               </div>
             </div>
@@ -50,7 +53,8 @@ export default function InfoDialog({
                       <span className="info-mode-badge normal">Normal</span>
                     </div>
                     <p className="info-mode-description">
-                      Race against the clock to name a target number of items. Your time is recorded on the leaderboard!
+                      Race against the clock to name a target number of items.
+                      Your time is recorded on the leaderboard!
                     </p>
                   </div>
                   <div className="info-mode-card">
@@ -58,7 +62,8 @@ export default function InfoDialog({
                       <span className="info-mode-badge blitz">Blitz</span>
                     </div>
                     <p className="info-mode-description">
-                      Name as many items as possible in 60 seconds! Speed and accuracy are key.
+                      Name as many items as possible in 60 seconds! Speed and
+                      accuracy are key.
                     </p>
                   </div>
                 </div>
@@ -75,4 +80,4 @@ export default function InfoDialog({
       </div>
     </>
   );
-};
+}

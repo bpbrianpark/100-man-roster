@@ -1,92 +1,92 @@
 .give-up-wrapper {
-    order: 1; 
+  order: 1;
 }
 
 .start-wrapper {
-    order: 1;
+  order: 1;
 }
 .restart-wrapper {
-    order: 3; 
+  order: 3;
 }
 
 .leaderboard-wrapper {
-    order: 2;
+  order: 2;
 }
 
 .toggle-button,
 .start-button,
 .give-up-button,
 .restart-button {
-    background: var(--color-primary);
-    border: 2px solid var(--color-secondary);
-    color: var(--color-text);
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    letter-spacing: 0.25px;
+  background: var(--color-primary);
+  border: 2px solid var(--color-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  letter-spacing: 0.25px;
 }
 
 .signin-button,
 .signout-button {
-    background: var(--color-primary);
-    border: 2px solid var(--color-secondary);
-    color: var(--color-text);
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    letter-spacing: 0.25px;
-    transition: all 0.2s ease;
+  background: var(--color-primary);
+  border: 2px solid var(--color-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 0.25px;
+  transition: all 0.2s ease;
 }
 
 .toggle-button:hover,
 .start-button:hover,
 .give-up-button:hover,
 .restart-button:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent);
-    color: white;
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: white;
 }
 
 .signin-button:hover,
 .signout-button:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent);
-    color: white;
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: white;
 }
 
 .toggle-button:active,
 .start-button:active,
 .give-up-button:active,
 .restart-button:active {
-    background: var(--success-color-light);
-    border-color: var(--success-color-light);
+  background: var(--success-color-light);
+  border-color: var(--success-color-light);
 }
 
 .toggle-button:disabled,
 .start-button:disabled,
 .give-up-button:disabled,
 .restart-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: var(--color-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-text);
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text);
 }
 
 .toggle-button:disabled:hover,
 .start-button:disabled:hover,
 .give-up-button:disabled:hover,
 .restart-button:disabled:hover {
-    background: var(--color-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-text);
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text);
 }
 
 .leaderboard-wrapper {

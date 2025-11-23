@@ -2,7 +2,6 @@
 
 import "./profile-client.css";
 import { useMemo } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ProfileClientPropsType } from "./types";
 import AdSlot from "./AdSlot";
@@ -13,8 +12,6 @@ export default function ProfileClient({
   user,
   games,
 }: ProfileClientPropsType) {
-  const { data: session } = useSession();
-  const isLoggedIn = !!session;
   const router = useRouter();
 
   const sortedGames = useMemo(() => {
@@ -24,13 +21,13 @@ export default function ProfileClient({
   const stats = useMemo(() => {
     const totalGames = games.length;
     const completedGames = games.filter(
-      (game) => game.correct_count >= (game.targetCount ?? 0)
+      (game) => game.correct_count >= (game.targetCount ?? 0),
     ).length;
     const averageCorrect =
       totalGames > 0
         ? Math.round(
             games.reduce((sum, game) => sum + game.correct_count, 0) /
-              totalGames
+              totalGames,
           )
         : 0;
     const bestScore =
@@ -51,9 +48,9 @@ export default function ProfileClient({
 
   const normalGames = useMemo(() => {
     return sortedGames.filter(
-      (game) => 
+      (game) =>
         (game.isBlitzGame === null || game.isBlitzGame === undefined) &&
-        !game.isDailyGame
+        !game.isDailyGame,
     );
   }, [sortedGames]);
 
@@ -67,7 +64,7 @@ export default function ProfileClient({
 
   const findDifficulty = (difficultyId: string, isDailyGame?: boolean) => {
     if (isDailyGame) return "Daily";
-    
+
     const difficulty = difficulties.find((diff) => diff.id === difficultyId);
     if (!difficulty) return "Unknown";
 
@@ -177,7 +174,10 @@ export default function ProfileClient({
                         </div>
                         <div className="game-stat">
                           <span className="stat-value">
-                            {findDifficulty(game.difficultyId, game.isDailyGame ?? undefined)}
+                            {findDifficulty(
+                              game.difficultyId,
+                              game.isDailyGame ?? undefined,
+                            )}
                           </span>
                           <span className="stat-name">Difficulty</span>
                         </div>
@@ -242,7 +242,10 @@ export default function ProfileClient({
                         </div>
                         <div className="game-stat">
                           <span className="stat-value">
-                            {findDifficulty(game.difficultyId, game.isDailyGame ?? undefined)}
+                            {findDifficulty(
+                              game.difficultyId,
+                              game.isDailyGame ?? undefined,
+                            )}
                           </span>
                           <span className="stat-name">Difficulty</span>
                         </div>

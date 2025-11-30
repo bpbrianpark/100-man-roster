@@ -218,24 +218,37 @@ export default function QuizGame({
         }
       }
 
-      try {
-        const response = await fetch(`/api/entries/tally`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(tallyPayload),
-        });
-
-        if (!response.ok) {
-          const text = await response.text();
-          console.error("[QuizGame] Failed to tally entries", {
-            status: response.status,
-            body: text,
+      const maxRetries = 3;
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          const response = await fetch(`/api/entries/tally`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tallyPayload),
           });
+
+          if (response.ok) {
+            break; 
+          }
+          
+          if (attempt < maxRetries - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          } else {
+            const text = await response.text();
+            console.error("[QuizGame] Failed to tally entries after retries", {
+              status: response.status,
+              body: text,
+            });
+          }
+        } catch (error) {
+          if (attempt === maxRetries - 1) {
+            console.error("[QuizGame] Error posting tally payload", error);
+          } else {
+            await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          }
         }
-      } catch (error) {
-        console.error("[QuizGame] Error posting tally payload", error);
       }
     },
     [user, slug, selectedDifficulty, targetEntries, correctGuesses],

@@ -3,7 +3,7 @@
 import "./guess-input.css";
 import Fuse from "fuse.js";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useRef } from "react";
 import { queryWDQS } from "../../../lib/wdqs";
 import { normalize } from "../../../lib/normalize";
 import { transformGuess } from "../../../lib/special-cases";
@@ -273,6 +273,7 @@ export default function GuessInput({
   const [showCorrectEffect, setShowCorrectEffect] = useState(false);
   const [showErrorEffect, setShowErrorEffect] = useState(false);
   const [loading, setLoading] = useState(false);
+  const isProcessingRef = useRef(false);
 
   const triggerCorrectEffect = () => {
     setShowCorrectEffect(true);
@@ -290,35 +291,41 @@ export default function GuessInput({
         e.preventDefault();
       }
 
-      if (!inputValue.trim()) {
-        return;
+      if (!inputValue.trim() || loading || isProcessingRef.current) {
+        return; 
       }
 
+      isProcessingRef.current = true;
       setLoading(true);
-      const correctEntry = await checkGuess(
-        category,
-        inputValue,
-        aliasHashMap,
-        entryByNorm,
-        entryByUrl,
-        entriesFuse,
-        aliasesFuse,
-        entryById,
-        true,
-      );
+      
+      try {
+        const correctEntry = await checkGuess(
+          category,
+          inputValue,
+          aliasHashMap,
+          entryByNorm,
+          entryByUrl,
+          entriesFuse,
+          aliasesFuse,
+          entryById,
+          true,
+        );
 
-      if (correctEntry) {
-        console.log("Correct Entry! :", correctEntry);
-        onCorrectGuess(correctEntry);
-        setInputValue("");
-        triggerCorrectEffect();
-      } else {
-        console.log("Incorrect Entry: ", inputValue);
-        onIncorrectGuess(inputValue.trim());
-        setInputValue("");
-        triggerErrorEffect();
+        if (correctEntry) {
+          console.log("Correct Entry! :", correctEntry);
+          onCorrectGuess(correctEntry);
+          setInputValue("");
+          triggerCorrectEffect();
+        } else {
+          console.log("Incorrect Entry: ", inputValue);
+          onIncorrectGuess(inputValue.trim());
+          setInputValue("");
+          triggerErrorEffect();
+        }
+      } finally {
+        setLoading(false);
+        isProcessingRef.current = false;
       }
-      setLoading(false);
     },
     [
       inputValue,
@@ -331,6 +338,7 @@ export default function GuessInput({
       entriesFuse,
       aliasesFuse,
       entryById,
+      loading,
     ],
   );
 

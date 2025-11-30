@@ -172,22 +172,37 @@ export default function BlitzGame({
           console.log("Error posting game", e);
         }
       }
+      const maxRetries = 3;
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          const response = await fetch(`/api/entries/tally`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tallyPayload),
+          });
 
-      try {
-        const response = await fetch(`/api/entries/tally`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(tallyPayload),
-        });
-
-        if (!response.ok) {
-          console.error("Failed to tally entries");
-          console.error(response);
+          if (response.ok) {
+            break; 
+          }
+          
+          if (attempt < maxRetries - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          } else {
+            const text = await response.text();
+            console.error("[BlitzGame] Failed to tally entries after retries", {
+              status: response.status,
+              body: text,
+            });
+          }
+        } catch (error) {
+          if (attempt === maxRetries - 1) {
+            console.error("[BlitzGame] Error posting tally payload", error);
+          } else {
+            await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          }
         }
-      } catch (error) {
-        console.error("Error posting tally payload", error);
       }
     },
     [user, slug, selectedDifficulty, targetEntries, correctGuesses],

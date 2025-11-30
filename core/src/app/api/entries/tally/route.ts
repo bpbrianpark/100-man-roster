@@ -41,53 +41,68 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    await prisma.$transaction(async (tx) => {
-      const category = await tx.category.findUnique({
-        where: { slug },
-      });
+    const maxRetries = 3;
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        await prisma.$transaction(async (tx) => {
+          const category = await tx.category.findUnique({
+            where: { slug },
+          });
 
-      if (!category) {
-        console.error("[/api/entries/tally] Category not found for slug", slug);
-        throw new Error("Category not found");
-      }
+          if (!category) {
+            console.error("[/api/entries/tally] Category not found for slug", slug);
+            throw new Error("Category not found");
+          }
 
-      const categoryId = category.id;
+          const categoryId = category.id;
 
-      for (const entry of deduped) {
-        const url = entry.url;
-        const label = entry.label;
-        const normValue = entry.norm ?? (label ? normalize(label) : undefined);
+          for (const entry of deduped) {
+            const url = entry.url;
+            const label = entry.label;
+            const normValue = entry.norm ?? (label ? normalize(label) : undefined);
 
-        if (!url || !label || !normValue) {
-          console.warn("[/api/entries/tally] Skipping incomplete entry", entry);
-          continue;
-        }
+            if (!url || !label || !normValue) {
+              console.warn("[/api/entries/tally] Skipping incomplete entry", entry);
+              continue;
+            }
 
-        console.log("[/api/entries/tally] Upserting entry", {
-          url,
-          label,
-          normValue,
+            console.log("[/api/entries/tally] Upserting entry", {
+              url,
+              label,
+              normValue,
+            });
+
+            await tx.entry.upsert({
+              where: { url },
+              update: {
+                count: { increment: 1 },
+                norm: normValue,
+                label,
+              } as any,
+              create: {
+                categoryId,
+                label,
+                norm: normValue,
+                url,
+                count: 1,
+              } as any,
+            } as any);
+          }
         });
+        return NextResponse.json({ ok: true });
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        console.error(`[/api/entries/tally] Attempt ${attempt + 1} failed:`, lastError);
 
-        await tx.entry.upsert({
-          where: { url },
-          update: {
-            count: { increment: 1 },
-            norm: normValue,
-            label,
-          } as any,
-          create: {
-            categoryId,
-            label,
-            norm: normValue,
-            url,
-            count: 1,
-          } as any,
-        } as any);
+        if (attempt < maxRetries - 1) {
+          await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+        }
       }
-    });
+    }
 
-    return NextResponse.json({ ok: true });
+    throw lastError || new Error("Unknown error");
   } catch (error) {
     console.error("[/api/entries/tally] Failed to increment entries", error);
     return NextResponse.json(
